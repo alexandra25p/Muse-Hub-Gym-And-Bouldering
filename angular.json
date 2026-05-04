@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "4ada69f7-2526-44e8-9c53-df1467c86758"
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -28,11 +28,14 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/theme.less", "src/styles.scss"]
           },
           "configurations": {
             "production": {
