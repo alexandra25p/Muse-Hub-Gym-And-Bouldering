@@ -1,1 +1,60 @@
-<p>auth works!</p>
+<div class="auth-container">
+  <nz-card class="auth-card">
+    <div class="auth-header">
+      <h1>Muse Hub</h1>
+      <p>Gym & Bouldering</p>
+    </div>
+
+    <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">Email</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Please enter a valid email">
+          <nz-input-group nzPrefixIcon="mail">
+            <input
+              nz-input
+              formControlName="email"
+              type="email"
+              placeholder="you@example.com"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">Password</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Password is required">
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+            <input
+              nz-input
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Enter your password"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplate>
+            <span
+              nz-icon
+              [nzType]="showPassword ? 'eye-invisible' : 'eye'"
+              (click)="showPassword = !showPassword"
+              style="cursor: pointer"
+            ></span>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      @if (errorMessage) {
+        <nz-alert nzType="error" [nzMessage]="errorMessage" nzShowIcon style="margin-bottom: 16px" />
+      }
+
+      <button
+        nz-button
+        nzType="primary"
+        nzBlock
+        [nzLoading]="loading"
+        htmlType="submit"
+      >
+        Log In
+      </button>
+    </form>
+  </nz-card>
+</div>

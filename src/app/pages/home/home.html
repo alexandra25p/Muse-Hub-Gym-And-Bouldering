@@ -1,0 +1,231 @@
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="brand-name">MuseHub</span>
+      <span class="brand-sep">|</span>
+      <span class="brand-sub">Gym & Bouldering</span>
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#fitness">Fitness</a>
+      <a href="#bouldering">Bouldering</a>
+    </div>
+    <div class="nav-actions">
+      <button nz-button (click)="openAuth('login')">Sign In</button>
+      <button nz-button nzType="primary" (click)="openAuth('signup')">Join Now</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Welcome to</span>
+    <h1 class="hero-title">MuseHub</h1>
+    <p class="hero-sub">Gym & Bouldering</p>
+    <p class="hero-desc">Climb higher. Train stronger. Find your muse.</p>
+    <div class="hero-ctas">
+      <button nz-button nzType="primary" nzSize="large" (click)="openAuth('signup')">
+        Get Started
+      </button>
+      <button nz-button nzSize="large" (click)="openAuth('login')">
+        Sign In
+      </button>
+    </div>
+  </div>
+  <div class="hero-blobs">
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-mint"></div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="about-section">
+  <div class="section-inner split">
+    <div class="about-text">
+      <span class="section-tag">About Us</span>
+      <h2>More than a gym.</h2>
+      <p>MuseHub is a community-first fitness and bouldering space designed for all levels. Whether you're picking up a hold for the first time or pushing your limits on V10 problems, this is your place.</p>
+      <p>We combine a fully equipped fitness floor, expert-led classes, and dynamic bouldering walls in one inspiring space.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card stat-purple">
+        <span class="stat-num">500+</span>
+        <span class="stat-label">Members</span>
+      </div>
+      <div class="stat-card stat-blue">
+        <span class="stat-num">40+</span>
+        <span class="stat-label">Boulder Problems</span>
+      </div>
+      <div class="stat-card stat-purple">
+        <span class="stat-num">20+</span>
+        <span class="stat-label">Classes / Week</span>
+      </div>
+      <div class="stat-card stat-blue">
+        <span class="stat-num">5★</span>
+        <span class="stat-label">Member Rating</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Fitness Section -->
+<section id="fitness" class="offering-section fitness-section">
+  <div class="section-inner">
+    <div class="offering-header">
+      <span class="section-tag tag-purple">Fitness</span>
+      <h2>Train like you mean it.</h2>
+      <p>A fully equipped gym floor built for everyone — from first-timers to seasoned athletes.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="feature-card card-purple">
+        <span nz-icon nzType="fire" nzTheme="outline" class="card-icon"></span>
+        <h3>Fitness Classes</h3>
+        <p>Yoga, HIIT, strength and more — led by certified instructors every day of the week.</p>
+      </div>
+      <div class="feature-card card-purple">
+        <span nz-icon nzType="rise" nzTheme="outline" class="card-icon"></span>
+        <h3>Strength & Cardio</h3>
+        <p>Free weights, machines, and cardio equipment on a spacious, well-maintained floor.</p>
+      </div>
+      <div class="feature-card card-purple">
+        <span nz-icon nzType="dashboard" nzTheme="outline" class="card-icon"></span>
+        <h3>Progress Tracking</h3>
+        <p>Log your workouts and track your progress over time with our member journal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bouldering Section -->
+<section id="bouldering" class="offering-section bouldering-section">
+  <div class="section-inner">
+    <div class="offering-header">
+      <span class="section-tag tag-blue">Bouldering</span>
+      <h2>Find your next problem.</h2>
+      <p>Challenging walls regularly reset by experienced setters, welcoming all grades.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="feature-card card-blue">
+        <span nz-icon nzType="apartment" nzTheme="outline" class="card-icon"></span>
+        <h3>All Difficulty Levels</h3>
+        <p>From beginner-friendly V0s to expert V10+ lines — there's always something for your level.</p>
+      </div>
+      <div class="feature-card card-blue">
+        <span nz-icon nzType="sync" nzTheme="outline" class="card-icon"></span>
+        <h3>Regular Resets</h3>
+        <p>Fresh problems every few weeks so you're always discovering something new.</p>
+      </div>
+      <div class="feature-card card-blue">
+        <span nz-icon nzType="team" nzTheme="outline" class="card-icon"></span>
+        <h3>Community Events</h3>
+        <p>Competitions, social nights, and skill workshops to grow and connect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to find your muse?</h2>
+    <p>Join hundreds of climbers and athletes at MuseHub.</p>
+    <button nz-button nzType="primary" nzSize="large" (click)="openAuth('signup')">
+      Join Now — It's Free
+    </button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 MuseHub · Gym & Bouldering</p>
+</footer>
+
+<!-- Auth Modal -->
+<nz-modal
+  [(nzVisible)]="authModalVisible"
+  [nzFooter]="null"
+  (nzOnCancel)="authModalVisible = false"
+  nzWidth="420px"
+>
+  <ng-container *nzModalContent>
+    <nz-tabs [(nzSelectedIndex)]="activeTab" class="auth-tabs">
+
+      <nz-tab nzTitle="Sign In">
+        <form nz-form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Email</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Please enter a valid email">
+              <nz-input-group nzPrefixIcon="mail">
+                <input nz-input formControlName="email" type="email" placeholder="you@example.com" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Password</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Password is required">
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="loginSuffix">
+                <input nz-input formControlName="password" [type]="showLoginPassword ? 'text' : 'password'" placeholder="Your password" />
+              </nz-input-group>
+              <ng-template #loginSuffix>
+                <span nz-icon [nzType]="showLoginPassword ? 'eye-invisible' : 'eye'" (click)="showLoginPassword = !showLoginPassword" style="cursor:pointer"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          @if (loginError) {
+            <nz-alert nzType="error" [nzMessage]="loginError" nzShowIcon style="margin-bottom:16px" />
+          }
+          <button nz-button nzType="primary" nzBlock [nzLoading]="loginLoading" htmlType="submit">
+            Sign In
+          </button>
+          <p class="switch-tab">Don't have an account?
+            <a (click)="activeTab = 1">Sign up</a>
+          </p>
+        </form>
+      </nz-tab>
+
+      <nz-tab nzTitle="Sign Up">
+        <form nz-form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="auth-form">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Name</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Name is required">
+              <nz-input-group nzPrefixIcon="user">
+                <input nz-input formControlName="name" placeholder="Your name" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Email</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Please enter a valid email">
+              <nz-input-group nzPrefixIcon="mail">
+                <input nz-input formControlName="email" type="email" placeholder="you@example.com" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Password</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Minimum 6 characters">
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="signupSuffix">
+                <input nz-input formControlName="password" [type]="showSignupPassword ? 'text' : 'password'" placeholder="Create a password" />
+              </nz-input-group>
+              <ng-template #signupSuffix>
+                <span nz-icon [nzType]="showSignupPassword ? 'eye-invisible' : 'eye'" (click)="showSignupPassword = !showSignupPassword" style="cursor:pointer"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          @if (signupError) {
+            <nz-alert nzType="error" [nzMessage]="signupError" nzShowIcon style="margin-bottom:16px" />
+          }
+          <button nz-button nzType="primary" nzBlock [nzLoading]="signupLoading" htmlType="submit">
+            Create Account
+          </button>
+          <p class="switch-tab">Already a member?
+            <a (click)="activeTab = 0">Sign in</a>
+          </p>
+        </form>
+      </nz-tab>
+
+    </nz-tabs>
+  </ng-container>
+</nz-modal>
