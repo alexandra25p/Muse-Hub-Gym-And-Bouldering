@@ -1,9 +1,9 @@
-import { Component, signal, computed, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppNavbar } from '../../shared/app-navbar/app-navbar';
 import { UserService } from '../../services/user.service';
+import { ClassesService, GymClass } from '../../services/classes.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -15,17 +15,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
-export interface GymClass {
-  id: number;
-  name: string;
-  type: string;
-  instructor: string;
-  day: string;
-  time: string;
-  capacity: number;
-}
-
-type SortKey = keyof GymClass;
+type SortKey = 'id' | 'name' | 'type' | 'instructor' | 'day' | 'time' | 'capacity';
 
 @Component({
   selector: 'app-classes',
@@ -49,6 +39,7 @@ type SortKey = keyof GymClass;
 })
 export class Classes {
   private userService = inject(UserService);
+  private classesService = inject(ClassesService);
   private router = inject(Router);
   user = this.userService.user;
   isAdmin = computed(() => this.user()?.email === 'admin@muse.com');
@@ -58,22 +49,13 @@ export class Classes {
     this.router.navigate(['/login']);
   }
 
-  private nextId = signal(6);
   searchQuery = signal('');
   sortKey = signal<SortKey | null>(null);
   sortOrder = signal<NzTableSortOrder>(null);
 
-  classes = signal<GymClass[]>([
-    { id: 1, name: 'Morning Yoga', type: 'Yoga', instructor: 'Ana Ionescu', day: 'Monday', time: '08:00', capacity: 15 },
-    { id: 2, name: 'HIIT Blast', type: 'HIIT', instructor: 'Mihai Pop', day: 'Tuesday', time: '18:00', capacity: 20 },
-    { id: 3, name: 'Boulder Basics', type: 'Bouldering', instructor: 'Radu Stan', day: 'Wednesday', time: '17:00', capacity: 12 },
-    { id: 4, name: 'Strength & Core', type: 'Strength', instructor: 'Elena Marin', day: 'Thursday', time: '19:00', capacity: 18 },
-    { id: 5, name: 'Weekend Climb', type: 'Bouldering', instructor: 'Radu Stan', day: 'Saturday', time: '10:00', capacity: 10 },
-  ]);
-
   filtered = computed(() => {
     const q = this.searchQuery().toLowerCase();
-    let list = this.classes().filter(
+    let list = this.classesService.classes().filter(
       c =>
         c.name.toLowerCase().includes(q) ||
         c.type.toLowerCase().includes(q) ||
@@ -148,21 +130,31 @@ export class Classes {
       Object.values(this.form.controls).forEach(c => c.markAsDirty());
       return;
     }
-    const val = this.form.value as Omit<GymClass, 'id'>;
+    const val = this.form.value as Omit<GymClass, 'id' | 'enrolled'>;
     if (this.editingId === null) {
-      const id = this.nextId();
-      this.classes.update(list => [...list, { id, ...val }]);
-      this.nextId.update(n => n + 1);
+      this.classesService.addClass(val);
     } else {
-      this.classes.update(list =>
-        list.map(c => (c.id === this.editingId ? { id: c.id, ...val } : c))
-      );
+      this.classesService.updateClass(this.editingId, val);
     }
     this.modalVisible = false;
   }
 
   delete(id: number): void {
-    this.classes.update(list => list.filter(c => c.id !== id));
+    this.classesService.deleteClass(id);
+  }
+
+  toggleBooking(classId: number): void {
+    const email = this.user()?.email;
+    if (email) this.classesService.toggleBooking(classId, email);
+  }
+
+  isBooked(classId: number): boolean {
+    const email = this.user()?.email;
+    return email ? this.classesService.isBooked(classId, email) : false;
+  }
+
+  isFull(classId: number): boolean {
+    return this.classesService.isFull(classId);
   }
 
   onSortChange(key: SortKey, order: NzTableSortOrder): void {

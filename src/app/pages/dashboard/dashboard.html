@@ -16,20 +16,54 @@
     </div>
     <div class="stat-card stat-blue">
       <span nz-icon nzType="calendar" nzTheme="outline" class="stat-icon"></span>
-      <span class="stat-num">3</span>
-      <span class="stat-label">Classes This Week</span>
+      <span class="stat-num">{{ myBookings().length }}</span>
+      <span class="stat-label">Booked Classes</span>
     </div>
     <div class="stat-card stat-purple">
       <span nz-icon nzType="edit" nzTheme="outline" class="stat-icon"></span>
-      <span class="stat-num">7</span>
+      <span class="stat-num">{{ journalCount() }}</span>
       <span class="stat-label">Journal Entries</span>
     </div>
     <div class="stat-card stat-blue">
-      <span nz-icon nzType="fire" nzTheme="outline" class="stat-icon"></span>
-      <span class="stat-num">12</span>
-      <span class="stat-label">Day Streak</span>
+      <span nz-icon nzType="rise" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">{{ totalRoutes() }}</span>
+      <span class="stat-label">Routes Finished</span>
     </div>
   </div>
+
+  @if (myBookings().length > 0) {
+    <div class="section-block">
+      <div class="section-header">
+        <h2>My Bookings</h2>
+        <a routerLink="/classes" class="see-all">Manage →</a>
+      </div>
+      <div class="upcoming-list">
+        @for (cls of myBookings(); track cls.id) {
+          <div class="class-row">
+            <div class="class-info">
+              <span class="class-name">{{ cls.name }}</span>
+              <span class="class-meta">{{ cls.instructor }}</span>
+            </div>
+            <div class="class-right">
+              <nz-tag [nzColor]="typeColors[cls.type]">{{ cls.type }}</nz-tag>
+              <span class="class-time">{{ cls.day }} · {{ cls.time }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="section-block">
+      <div class="section-header">
+        <h2>My Bookings</h2>
+        <a routerLink="/classes" class="see-all">Browse classes →</a>
+      </div>
+      <div class="empty-bookings">
+        <span nz-icon nzType="calendar" nzTheme="outline"></span>
+        <p>No classes booked yet. <a routerLink="/classes">Find one</a> that works for you.</p>
+      </div>
+    </div>
+  }
 
   <div class="section-block">
     <div class="section-header">
@@ -37,14 +71,14 @@
       <a routerLink="/classes" class="see-all">See all →</a>
     </div>
     <div class="upcoming-list">
-      @for (cls of upcomingClasses; track cls.name) {
+      @for (cls of upcomingClasses(); track cls.id) {
         <div class="class-row">
           <div class="class-info">
             <span class="class-name">{{ cls.name }}</span>
             <span class="class-meta">{{ cls.instructor }}</span>
           </div>
           <div class="class-right">
-            <nz-tag [nzColor]="cls.color">{{ cls.type }}</nz-tag>
+            <nz-tag [nzColor]="typeColors[cls.type]">{{ cls.type }}</nz-tag>
             <span class="class-time">{{ cls.day }} · {{ cls.time }}</span>
           </div>
         </div>
@@ -59,11 +93,15 @@
         <span nz-icon nzType="schedule" nzTheme="outline"></span>
         <span>View Schedule</span>
       </a>
-      <a routerLink="/journal" class="action-card action-blue">
+      <a routerLink="/wall" class="action-card action-blue">
+        <span nz-icon nzType="apartment" nzTheme="outline"></span>
+        <span>Bouldering Wall</span>
+      </a>
+      <a routerLink="/journal" class="action-card action-mint">
         <span nz-icon nzType="book" nzTheme="outline"></span>
         <span>Open Journal</span>
       </a>
-      <a routerLink="/profile" class="action-card action-mint">
+      <a routerLink="/profile" class="action-card action-purple">
         <span nz-icon nzType="user" nzTheme="outline"></span>
         <span>Edit Profile</span>
       </a>

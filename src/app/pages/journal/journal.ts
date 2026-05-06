@@ -2,7 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppNavbar } from '../../shared/app-navbar/app-navbar';
+import { AppChart } from '../../shared/chart/chart';
 import { UserService } from '../../services/user.service';
+import { JournalService, FitnessEntry, BoulderingEntry, JournalEntry } from '../../services/journal.service';
+import { WallService } from '../../services/wall.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -13,35 +16,13 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
-export interface FitnessEntry {
-  id: number;
-  type: 'fitness';
-  date: string;
-  muscleGroups: string[];
-  equipment: string;
-  reps: number;
-  kcal: number;
-}
-
-export interface BoulderingEntry {
-  id: number;
-  type: 'bouldering';
-  date: string;
-  routesFinished: number;
-  routesFlashed: number;
-  difficulty: string;
-  durationMinutes: number;
-  kcal: number;
-}
-
-export type JournalEntry = FitnessEntry | BoulderingEntry;
-
 @Component({
   selector: 'app-journal',
   imports: [
     ReactiveFormsModule,
     FormsModule,
     AppNavbar,
+    AppChart,
     NzButtonModule,
     NzCheckboxModule,
     NzFormModule,
@@ -57,6 +38,8 @@ export type JournalEntry = FitnessEntry | BoulderingEntry;
 })
 export class Journal {
   private userService = inject(UserService);
+  private journalService = inject(JournalService);
+  private wallService = inject(WallService);
   private router = inject(Router);
   user = this.userService.user;
 
@@ -65,9 +48,8 @@ export class Journal {
     this.router.navigate(['/login']);
   }
 
-  private nextId = signal(1);
+  entries = this.journalService.entries;
   activeTab = signal(0);
-  entries = signal<JournalEntry[]>([]);
 
   filteredEntries = computed(() => {
     const tab = this.activeTab();
@@ -89,6 +71,41 @@ export class Journal {
       .reduce((sum, e) => sum + e.routesFlashed, 0)
   );
   totalKcal = computed(() => this.entries().reduce((sum, e) => sum + e.kcal, 0));
+  wallSends = computed(() => {
+    const email = this.user()?.email;
+    if (!email) return 0;
+    return this.wallService.routes().filter(r => r.completedBy.includes(email)).length;
+  });
+
+  // Chart data — chronological (oldest→newest), last 10 entries
+  kcalLabels = computed(() =>
+    this.entries().slice(0, 10).reverse().map(e => e.date)
+  );
+  kcalData = computed(() =>
+    this.entries().slice(0, 10).reverse().map(e => e.kcal)
+  );
+
+  routesLabels = computed(() =>
+    this.entries()
+      .filter((e): e is BoulderingEntry => e.type === 'bouldering')
+      .slice(0, 8).reverse().map(e => e.date)
+  );
+  routesData = computed(() =>
+    this.entries()
+      .filter((e): e is BoulderingEntry => e.type === 'bouldering')
+      .slice(0, 8).reverse().map(e => e.routesFinished)
+  );
+
+  repsLabels = computed(() =>
+    this.entries()
+      .filter((e): e is FitnessEntry => e.type === 'fitness')
+      .slice(0, 8).reverse().map(e => e.date)
+  );
+  repsData = computed(() =>
+    this.entries()
+      .filter((e): e is FitnessEntry => e.type === 'fitness')
+      .slice(0, 8).reverse().map(e => e.reps)
+  );
 
   modalVisible = false;
   entryType = signal<'fitness' | 'bouldering'>('fitness');
@@ -134,7 +151,11 @@ export class Journal {
   }
 
   save(): void {
-    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    const date = new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
 
     if (this.entryType() === 'fitness') {
       if (this.selectedMuscles.length === 0) this.muscleError = true;
@@ -142,39 +163,32 @@ export class Journal {
       if (this.fitnessForm.invalid || this.selectedMuscles.length === 0) return;
 
       const v = this.fitnessForm.value;
-      this.entries.update(list => [
-        {
-          id: this.nextId(),
-          type: 'fitness',
-          date,
-          muscleGroups: [...this.selectedMuscles],
-          equipment: v.equipment,
-          reps: v.reps,
-          kcal: v.kcal,
-        },
-        ...list,
-      ]);
+      this.journalService.addEntry({
+        id: Date.now(),
+        type: 'fitness',
+        date,
+        muscleGroups: [...this.selectedMuscles],
+        equipment: v.equipment,
+        reps: v.reps,
+        kcal: v.kcal,
+      } as FitnessEntry);
     } else {
       Object.values(this.boulderingForm.controls).forEach(c => c.markAsDirty());
       if (this.boulderingForm.invalid) return;
 
       const v = this.boulderingForm.value;
-      this.entries.update(list => [
-        {
-          id: this.nextId(),
-          type: 'bouldering',
-          date,
-          routesFinished: v.routesFinished,
-          routesFlashed: v.routesFlashed,
-          difficulty: v.difficulty,
-          durationMinutes: v.durationMinutes,
-          kcal: v.kcal,
-        },
-        ...list,
-      ]);
+      this.journalService.addEntry({
+        id: Date.now(),
+        type: 'bouldering',
+        date,
+        routesFinished: v.routesFinished,
+        routesFlashed: v.routesFlashed,
+        difficulty: v.difficulty,
+        durationMinutes: v.durationMinutes,
+        kcal: v.kcal,
+      } as BoulderingEntry);
     }
 
-    this.nextId.update(n => n + 1);
     this.modalVisible = false;
   }
 

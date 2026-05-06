@@ -163,6 +163,32 @@ $text-light: #8a8a9a;
   }
 }
 
+.empty-bookings {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+
+  span[nz-icon] {
+    font-size: 32px;
+    color: #d0cce8;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: $text-light;
+    margin: 0;
+    font-size: 14px;
+
+    a {
+      color: $purple-mid;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

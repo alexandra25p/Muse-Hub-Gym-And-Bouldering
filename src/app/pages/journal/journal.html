@@ -21,7 +21,7 @@
     <div class="stat-card stat-blue">
       <span nz-icon nzType="rise" nzTheme="outline" class="stat-icon"></span>
       <span class="stat-num">{{ totalRoutes() }}</span>
-      <span class="stat-label">Routes Finished</span>
+      <span class="stat-label">Session Routes</span>
     </div>
     <div class="stat-card stat-purple">
       <span nz-icon nzType="star" nzTheme="outline" class="stat-icon"></span>
@@ -29,11 +29,54 @@
       <span class="stat-label">Routes Flashed</span>
     </div>
     <div class="stat-card stat-blue">
+      <span nz-icon nzType="check-circle" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">{{ wallSends() }}</span>
+      <span class="stat-label">Wall Sends</span>
+    </div>
+    <div class="stat-card stat-purple">
       <span nz-icon nzType="fire" nzTheme="outline" class="stat-icon"></span>
       <span class="stat-num">{{ totalKcal() }}</span>
       <span class="stat-label">Kcal Burned</span>
     </div>
   </div>
+
+  @if (entries().length >= 2) {
+    <div class="charts-section">
+      <h2 class="section-title">Progress</h2>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Kcal Burned</h3>
+          @if (kcalData().length >= 2) {
+            <div class="chart-wrap">
+              <app-chart type="line" [labels]="kcalLabels()" [data]="kcalData()" color="#9b7fd4" label="Kcal"></app-chart>
+            </div>
+          } @else {
+            <div class="chart-empty">Log more entries to see trends</div>
+          }
+        </div>
+        <div class="chart-card">
+          <h3>Routes per Session</h3>
+          @if (routesData().length >= 2) {
+            <div class="chart-wrap">
+              <app-chart type="bar" [labels]="routesLabels()" [data]="routesData()" color="#5a9fd4" label="Routes"></app-chart>
+            </div>
+          } @else {
+            <div class="chart-empty">Log more bouldering sessions</div>
+          }
+        </div>
+        <div class="chart-card">
+          <h3>Reps per Session</h3>
+          @if (repsData().length >= 2) {
+            <div class="chart-wrap">
+              <app-chart type="line" [labels]="repsLabels()" [data]="repsData()" color="#52c4a0" label="Reps"></app-chart>
+            </div>
+          } @else {
+            <div class="chart-empty">Log more fitness sessions</div>
+          }
+        </div>
+      </div>
+    </div>
+  }
 
   <div class="entries-section">
     <div class="filter-bar">

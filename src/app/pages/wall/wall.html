@@ -1,0 +1,169 @@
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="wall-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Bouldering Wall</h1>
+      <p class="page-sub">{{ routes().length }} current problems</p>
+    </div>
+    @if (isAdmin()) {
+      <button nz-button nzType="primary" (click)="openAdd()">
+        <span nz-icon nzType="plus"></span>
+        Add Route
+      </button>
+    }
+  </div>
+
+  <div class="toolbar">
+    <nz-input-group [nzPrefix]="searchIcon" class="search-input">
+      <input
+        nz-input
+        placeholder="Search by name, grade or setter…"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </nz-input-group>
+    <ng-template #searchIcon><span nz-icon nzType="search"></span></ng-template>
+
+    <div class="grade-pills">
+      <button class="pill" [class.pill-active]="gradeFilter() === ''" (click)="gradeFilter.set('')">All</button>
+      @for (grade of gradeOptions; track grade) {
+        <button class="pill" [class.pill-active]="gradeFilter() === grade" (click)="gradeFilter.set(grade)">{{ grade }}</button>
+      }
+    </div>
+  </div>
+
+  @if (mySendsCount() > 0) {
+    <div class="sends-banner">
+      <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+      You've completed <strong>{{ mySendsCount() }}</strong> route{{ mySendsCount() !== 1 ? 's' : '' }} on this wall
+    </div>
+  }
+
+  @if (filteredRoutes().length === 0) {
+    <div class="empty-state">
+      <span nz-icon nzType="search" nzTheme="outline" class="empty-icon"></span>
+      <p>No routes match your filter.</p>
+    </div>
+  } @else {
+    <div class="routes-grid">
+      @for (route of filteredRoutes(); track route.id) {
+        <div
+          class="route-card"
+          [class.completed]="isCompleted(route.id)"
+          [style.border-left-color]="gradeBorderHex(route.grade)"
+        >
+          <div class="route-top">
+            <div class="route-badges">
+              <div class="color-dot" [style.background]="holdColors[route.color]" [title]="route.color + ' holds'"></div>
+              <nz-tag [nzColor]="gradeColor(route.grade)">{{ route.grade }}</nz-tag>
+            </div>
+            @if (isAdmin()) {
+              <div class="admin-actions">
+                <button nz-button nzType="text" nzSize="small" (click)="openEdit(route)">
+                  <span nz-icon nzType="edit"></span>
+                </button>
+                <button
+                  nz-button nzType="text" nzSize="small" nzDanger
+                  nz-popconfirm nzPopconfirmTitle="Remove this route?"
+                  (nzOnConfirm)="delete(route.id)"
+                >
+                  <span nz-icon nzType="delete"></span>
+                </button>
+              </div>
+            }
+          </div>
+
+          <h3 class="route-name">{{ route.name }}</h3>
+
+          <div class="route-meta">
+            <span><span nz-icon nzType="user" nzTheme="outline"></span> {{ route.setter }}</span>
+            <span><span nz-icon nzType="calendar" nzTheme="outline"></span> {{ route.dateSet }}</span>
+          </div>
+
+          <div class="route-footer">
+            <span class="send-count">{{ route.completedBy.length }} send{{ route.completedBy.length !== 1 ? 's' : '' }}</span>
+            <button
+              nz-button
+              [nzType]="isCompleted(route.id) ? 'default' : 'primary'"
+              nzSize="small"
+              (click)="toggleComplete(route.id)"
+            >
+              @if (isCompleted(route.id)) {
+                <span nz-icon nzType="check"></span> Sent!
+              } @else {
+                Mark Sent
+              }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzTitle]="editingId === null ? 'Add Route' : 'Edit Route'"
+  [nzFooter]="null"
+  (nzOnCancel)="modalVisible = false"
+  nzWidth="480px"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="saveModal()" class="modal-form">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Route Name</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+          <input nz-input formControlName="name" placeholder="e.g. Purple Rain" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="two-col">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Grade</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <nz-select formControlName="grade" nzPlaceHolder="Select grade">
+              @for (g of gradeOptions; track g) {
+                <nz-option [nzValue]="g" [nzLabel]="g"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Hold Color</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <nz-select formControlName="color" nzPlaceHolder="Select color">
+              @for (c of colorOptions; track c) {
+                <nz-option [nzValue]="c" [nzLabel]="c | titlecase"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="two-col">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Setter</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <input nz-input formControlName="setter" placeholder="Setter name" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Date Set</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <input nz-input formControlName="dateSet" type="date" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="modal-footer">
+        <button nz-button (click)="modalVisible = false" type="button">Cancel</button>
+        <button nz-button nzType="primary" htmlType="submit">
+          {{ editingId === null ? 'Add Route' : 'Save Changes' }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

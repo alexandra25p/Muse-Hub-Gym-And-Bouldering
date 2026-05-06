@@ -4,7 +4,7 @@
   <div class="page-header">
     <div>
       <h1 class="page-title">Classes</h1>
-      <p class="page-sub">Browse and manage the weekly schedule</p>
+      <p class="page-sub">Browse and book the weekly schedule</p>
     </div>
     @if (isAdmin()) {
       <button nz-button nzType="primary" (click)="openAdd()">
@@ -36,68 +36,52 @@
   >
     <thead>
       <tr>
-        <th
-          nzColumnKey="name"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('name', $event)"
-        >Name</th>
-        <th
-          nzColumnKey="type"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('type', $event)"
-        >Type</th>
-        <th
-          nzColumnKey="instructor"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('instructor', $event)"
-        >Instructor</th>
-        <th
-          nzColumnKey="day"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('day', $event)"
-        >Day</th>
-        <th
-          nzColumnKey="time"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('time', $event)"
-        >Time</th>
-        <th
-          nzColumnKey="capacity"
-          [nzSortFn]="true"
-          (nzSortOrderChange)="onSortChange('capacity', $event)"
-        >Capacity</th>
-        @if (isAdmin()) { <th>Actions</th> }
+        <th nzColumnKey="name" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('name', $event)">Name</th>
+        <th nzColumnKey="type" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('type', $event)">Type</th>
+        <th nzColumnKey="instructor" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('instructor', $event)">Instructor</th>
+        <th nzColumnKey="day" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('day', $event)">Day</th>
+        <th nzColumnKey="time" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('time', $event)">Time</th>
+        <th nzColumnKey="capacity" [nzSortFn]="true" (nzSortOrderChange)="onSortChange('capacity', $event)">Spots</th>
+        <th>{{ isAdmin() ? 'Actions' : 'Booking' }}</th>
       </tr>
     </thead>
     <tbody>
       @for (cls of table.data; track cls.id) {
         <tr>
           <td class="name-cell">{{ cls.name }}</td>
-          <td>
-            <nz-tag [nzColor]="typeColors[cls.type]">{{ cls.type }}</nz-tag>
-          </td>
+          <td><nz-tag [nzColor]="typeColors[cls.type]">{{ cls.type }}</nz-tag></td>
           <td>{{ cls.instructor }}</td>
           <td>{{ cls.day }}</td>
           <td>{{ cls.time }}</td>
-          <td>{{ cls.capacity }}</td>
-          @if (isAdmin()) {
-            <td class="actions-cell">
+          <td>
+            <span [class.spots-full]="cls.enrolled.length >= cls.capacity">
+              {{ cls.enrolled.length }}/{{ cls.capacity }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            @if (isAdmin()) {
               <button nz-button nzType="text" nzSize="small" (click)="openEdit(cls)">
                 <span nz-icon nzType="edit"></span>
               </button>
               <button
-                nz-button
-                nzType="text"
-                nzSize="small"
-                nzDanger
-                nz-popconfirm
-                nzPopconfirmTitle="Delete this class?"
+                nz-button nzType="text" nzSize="small" nzDanger
+                nz-popconfirm nzPopconfirmTitle="Delete this class?"
                 (nzOnConfirm)="delete(cls.id)"
               >
                 <span nz-icon nzType="delete"></span>
               </button>
-            </td>
-          }
+            } @else {
+              <button
+                nz-button
+                [nzType]="isBooked(cls.id) ? 'default' : 'primary'"
+                nzSize="small"
+                [disabled]="isFull(cls.id) && !isBooked(cls.id)"
+                (click)="toggleBooking(cls.id)"
+              >
+                {{ isBooked(cls.id) ? 'Booked ✓' : isFull(cls.id) ? 'Full' : 'Book' }}
+              </button>
+            }
+          </td>
         </tr>
       }
     </tbody>

@@ -233,6 +233,54 @@ $text-light: #8a8a9a;
   }
 }
 
+// Charts
+.charts-section {
+  margin-bottom: 36px;
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: $dark;
+    margin: 0 0 16px;
+  }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.07);
+
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-light;
+    margin: 0 0 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+}
+
+.chart-wrap {
+  height: 160px;
+}
+
+.chart-empty {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: $text-light;
+  font-style: italic;
+}
+
 // Modal
 .modal-inner {
   padding: 4px 0;
