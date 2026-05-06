@@ -6,10 +6,12 @@
       <h1 class="page-title">Classes</h1>
       <p class="page-sub">Browse and manage the weekly schedule</p>
     </div>
-    <button nz-button nzType="primary" (click)="openAdd()">
-      <span nz-icon nzType="plus"></span>
-      Add Class
-    </button>
+    @if (isAdmin()) {
+      <button nz-button nzType="primary" (click)="openAdd()">
+        <span nz-icon nzType="plus"></span>
+        Add Class
+      </button>
+    }
   </div>
 
   <div class="toolbar">
@@ -64,7 +66,7 @@
           [nzSortFn]="true"
           (nzSortOrderChange)="onSortChange('capacity', $event)"
         >Capacity</th>
-        <th>Actions</th>
+        @if (isAdmin()) { <th>Actions</th> }
       </tr>
     </thead>
     <tbody>
@@ -78,22 +80,24 @@
           <td>{{ cls.day }}</td>
           <td>{{ cls.time }}</td>
           <td>{{ cls.capacity }}</td>
-          <td class="actions-cell">
-            <button nz-button nzType="text" nzSize="small" (click)="openEdit(cls)">
-              <span nz-icon nzType="edit"></span>
-            </button>
-            <button
-              nz-button
-              nzType="text"
-              nzSize="small"
-              nzDanger
-              nz-popconfirm
-              nzPopconfirmTitle="Delete this class?"
-              (nzOnConfirm)="delete(cls.id)"
-            >
-              <span nz-icon nzType="delete"></span>
-            </button>
-          </td>
+          @if (isAdmin()) {
+            <td class="actions-cell">
+              <button nz-button nzType="text" nzSize="small" (click)="openEdit(cls)">
+                <span nz-icon nzType="edit"></span>
+              </button>
+              <button
+                nz-button
+                nzType="text"
+                nzSize="small"
+                nzDanger
+                nz-popconfirm
+                nzPopconfirmTitle="Delete this class?"
+                (nzOnConfirm)="delete(cls.id)"
+              >
+                <span nz-icon nzType="delete"></span>
+              </button>
+            </td>
+          }
         </tr>
       }
     </tbody>

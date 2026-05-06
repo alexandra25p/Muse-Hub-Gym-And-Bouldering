@@ -51,6 +51,7 @@ export class Classes {
   private userService = inject(UserService);
   private router = inject(Router);
   user = this.userService.user;
+  isAdmin = computed(() => this.user()?.email === 'admin@muse.com');
 
   logout(): void {
     this.userService.logout();

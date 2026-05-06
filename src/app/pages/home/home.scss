@@ -420,27 +420,3 @@ $text-light: #8a8a9a;
   }
 }
 
-// Auth modal
-.auth-tabs {
-  padding: 4px 24px 24px;
-
-  .auth-form {
-    padding-top: 12px;
-  }
-
-  .switch-tab {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 13px;
-    color: $text-light;
-
-    a {
-      color: $purple-mid;
-      cursor: pointer;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}

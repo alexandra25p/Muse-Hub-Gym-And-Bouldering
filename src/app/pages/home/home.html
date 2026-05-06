@@ -11,8 +11,8 @@
       <a href="#bouldering">Bouldering</a>
     </div>
     <div class="nav-actions">
-      <button nz-button (click)="openAuth('login')">Sign In</button>
-      <button nz-button nzType="primary" (click)="openAuth('signup')">Join Now</button>
+      <button nz-button routerLink="/login">Sign In</button>
+      <button nz-button nzType="primary" routerLink="/login">Join Now</button>
     </div>
   </div>
 </nav>
@@ -25,10 +25,10 @@
     <p class="hero-sub">Gym & Bouldering</p>
     <p class="hero-desc">Climb higher. Train stronger. Find your muse.</p>
     <div class="hero-ctas">
-      <button nz-button nzType="primary" nzSize="large" (click)="openAuth('signup')">
+      <button nz-button nzType="primary" nzSize="large" routerLink="/login">
         Get Started
       </button>
-      <button nz-button nzSize="large" (click)="openAuth('login')">
+      <button nz-button nzSize="large" routerLink="/login">
         Sign In
       </button>
     </div>
@@ -131,7 +131,7 @@
   <div class="cta-inner">
     <h2>Ready to find your muse?</h2>
     <p>Join hundreds of climbers and athletes at MuseHub.</p>
-    <button nz-button nzType="primary" nzSize="large" (click)="openAuth('signup')">
+    <button nz-button nzType="primary" nzSize="large" routerLink="/login">
       Join Now — It's Free
     </button>
   </div>
@@ -141,91 +141,3 @@
 <footer class="footer">
   <p>© 2026 MuseHub · Gym & Bouldering</p>
 </footer>
-
-<!-- Auth Modal -->
-<nz-modal
-  [(nzVisible)]="authModalVisible"
-  [nzFooter]="null"
-  (nzOnCancel)="authModalVisible = false"
-  nzWidth="420px"
->
-  <ng-container *nzModalContent>
-    <nz-tabs [(nzSelectedIndex)]="activeTab" class="auth-tabs">
-
-      <nz-tab nzTitle="Sign In">
-        <form nz-form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="24">Email</nz-form-label>
-            <nz-form-control [nzSpan]="24" nzErrorTip="Please enter a valid email">
-              <nz-input-group nzPrefixIcon="mail">
-                <input nz-input formControlName="email" type="email" placeholder="you@example.com" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="24">Password</nz-form-label>
-            <nz-form-control [nzSpan]="24" nzErrorTip="Password is required">
-              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="loginSuffix">
-                <input nz-input formControlName="password" [type]="showLoginPassword ? 'text' : 'password'" placeholder="Your password" />
-              </nz-input-group>
-              <ng-template #loginSuffix>
-                <span nz-icon [nzType]="showLoginPassword ? 'eye-invisible' : 'eye'" (click)="showLoginPassword = !showLoginPassword" style="cursor:pointer"></span>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-          @if (loginError) {
-            <nz-alert nzType="error" [nzMessage]="loginError" nzShowIcon style="margin-bottom:16px" />
-          }
-          <button nz-button nzType="primary" nzBlock [nzLoading]="loginLoading" htmlType="submit">
-            Sign In
-          </button>
-          <p class="switch-tab">Don't have an account?
-            <a (click)="activeTab = 1">Sign up</a>
-          </p>
-        </form>
-      </nz-tab>
-
-      <nz-tab nzTitle="Sign Up">
-        <form nz-form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="auth-form">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="24">Name</nz-form-label>
-            <nz-form-control [nzSpan]="24" nzErrorTip="Name is required">
-              <nz-input-group nzPrefixIcon="user">
-                <input nz-input formControlName="name" placeholder="Your name" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="24">Email</nz-form-label>
-            <nz-form-control [nzSpan]="24" nzErrorTip="Please enter a valid email">
-              <nz-input-group nzPrefixIcon="mail">
-                <input nz-input formControlName="email" type="email" placeholder="you@example.com" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="24">Password</nz-form-label>
-            <nz-form-control [nzSpan]="24" nzErrorTip="Minimum 6 characters">
-              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="signupSuffix">
-                <input nz-input formControlName="password" [type]="showSignupPassword ? 'text' : 'password'" placeholder="Create a password" />
-              </nz-input-group>
-              <ng-template #signupSuffix>
-                <span nz-icon [nzType]="showSignupPassword ? 'eye-invisible' : 'eye'" (click)="showSignupPassword = !showSignupPassword" style="cursor:pointer"></span>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-          @if (signupError) {
-            <nz-alert nzType="error" [nzMessage]="signupError" nzShowIcon style="margin-bottom:16px" />
-          }
-          <button nz-button nzType="primary" nzBlock [nzLoading]="signupLoading" htmlType="submit">
-            Create Account
-          </button>
-          <p class="switch-tab">Already a member?
-            <a (click)="activeTab = 0">Sign in</a>
-          </p>
-        </form>
-      </nz-tab>
-
-    </nz-tabs>
-  </ng-container>
-</nz-modal>

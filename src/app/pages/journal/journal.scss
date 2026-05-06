@@ -1,0 +1,273 @@
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$blue-mid: #5a9fd4;
+$blue-dark: #2a6fa0;
+$dark: #2d2d3e;
+$text: #4a4a5a;
+$text-light: #8a8a9a;
+
+.journal-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 60px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: $dark;
+    margin: 0 0 4px;
+  }
+
+  .page-sub {
+    color: $text-light;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.stat-card {
+  border-radius: 16px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .stat-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .stat-num {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: $text-light;
+  }
+
+  &.stat-purple {
+    background: linear-gradient(135deg, #f5f0ff, #ede5ff);
+
+    .stat-icon,
+    .stat-num {
+      background: linear-gradient(135deg, $purple-mid, $purple-dark);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  &.stat-blue {
+    background: linear-gradient(135deg, #eef7ff, #ddeeff);
+
+    .stat-icon,
+    .stat-num {
+      background: linear-gradient(135deg, $blue-mid, $blue-dark);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+}
+
+.entries-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+  overflow: hidden;
+}
+
+.filter-bar {
+  padding: 20px 24px 0;
+  border-bottom: 1px solid #f0edf8;
+
+  .filter-pills {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 16px;
+  }
+}
+
+.pill {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid #e8e4f0;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-light;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $purple-mid;
+    color: $purple-mid;
+  }
+
+  &.pill-active {
+    background: linear-gradient(135deg, $purple-mid, $blue-mid);
+    border-color: transparent;
+    color: white;
+  }
+}
+
+.empty-state {
+  padding: 60px 24px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 48px;
+    color: #d0cce8;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: $text-light;
+    font-size: 15px;
+    margin: 0;
+  }
+}
+
+.entries-list {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entry-card {
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-left: 4px solid transparent;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  &.entry-fitness {
+    background: linear-gradient(135deg, #faf8ff, #f5f0ff);
+    border-left-color: $purple-mid;
+  }
+
+  &.entry-bouldering {
+    background: linear-gradient(135deg, #f5faff, #eef4ff);
+    border-left-color: $blue-mid;
+  }
+}
+
+.entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .entry-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .entry-date {
+    font-size: 13px;
+    color: $text-light;
+  }
+
+  .entry-kcal {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e06040;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.entry-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: $text-light;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: $dark;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+}
+
+// Modal
+.modal-inner {
+  padding: 4px 0;
+
+  .type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+}
+
+.entry-form {
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+  }
+
+  .field-error {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}
