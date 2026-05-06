@@ -65,6 +65,31 @@
     </div>
   }
 
+  @if (recentActivity().length > 0) {
+    <div class="section-block">
+      <div class="section-header">
+        <h2>Recent Activity</h2>
+        <a routerLink="/journal" class="see-all">View journal →</a>
+      </div>
+      <div class="activity-feed">
+        @for (entry of recentActivity(); track entry.id) {
+          <div class="feed-item">
+            <div class="feed-dot" [class.dot-fitness]="entry.type === 'fitness'" [class.dot-bouldering]="entry.type === 'bouldering'"></div>
+            <div class="feed-content">
+              <div class="feed-top">
+                <nz-tag [nzColor]="entry.type === 'fitness' ? 'purple' : 'blue'" class="feed-tag">
+                  {{ entry.type === 'fitness' ? 'Fitness' : 'Bouldering' }}
+                </nz-tag>
+                <span class="feed-meta">{{ entry.date }}</span>
+              </div>
+              <span class="feed-detail">{{ activitySummary(entry) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
   <div class="section-block">
     <div class="section-header">
       <h2>Upcoming Classes</h2>
@@ -101,10 +126,66 @@
         <span nz-icon nzType="book" nzTheme="outline"></span>
         <span>Open Journal</span>
       </a>
-      <a routerLink="/profile" class="action-card action-purple">
+      <a routerLink="/leaderboard" class="action-card action-purple">
+        <span nz-icon nzType="crown" nzTheme="outline"></span>
+        <span>Leaderboard</span>
+      </a>
+      <a routerLink="/profile" class="action-card action-blue">
         <span nz-icon nzType="user" nzTheme="outline"></span>
         <span>Edit Profile</span>
       </a>
+      @if (isAdmin()) {
+        <a routerLink="/admin" class="action-card action-admin">
+          <span nz-icon nzType="setting" nzTheme="outline"></span>
+          <span>Admin Panel</span>
+        </a>
+      }
     </div>
   </div>
 </div>
+
+<!-- Onboarding modal -->
+<nz-modal
+  [nzVisible]="showOnboarding()"
+  nzTitle="Welcome to MuseHub! 🎉"
+  [nzFooter]="null"
+  [nzClosable]="false"
+  [nzMaskClosable]="false"
+  nzWidth="480px"
+>
+  <ng-container *nzModalContent>
+    <div class="onboarding-inner">
+      @if (onboardingStep() === 1) {
+        <p class="onboarding-sub">Let's personalise your experience. What's your main fitness goal?</p>
+        <div class="onboarding-options">
+          @for (goal of fitnessGoals; track goal) {
+            <button class="option-pill" [class.selected]="selectedGoal() === goal" (click)="selectedGoal.set(goal)">
+              {{ goal }}
+            </button>
+          }
+        </div>
+        <div class="onboarding-footer">
+          <button nz-button nzType="primary" [disabled]="!selectedGoal()" (click)="nextOnboardingStep()">Next →</button>
+        </div>
+      } @else {
+        <p class="onboarding-sub">Almost done! What's your experience level?</p>
+        <div class="onboarding-options">
+          @for (level of experienceLevels; track level) {
+            <button class="option-pill" [class.selected]="selectedLevel() === level" (click)="selectedLevel.set(level)">
+              {{ level }}
+            </button>
+          }
+        </div>
+        <div class="onboarding-footer">
+          <button nz-button (click)="onboardingStep.set(1)">← Back</button>
+          <button nz-button nzType="primary" [disabled]="!selectedLevel()" (click)="completeOnboarding()">Start Training</button>
+        </div>
+      }
+
+      <div class="onboarding-steps">
+        <span class="step-dot" [class.active]="onboardingStep() === 1"></span>
+        <span class="step-dot" [class.active]="onboardingStep() === 2"></span>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

@@ -1,0 +1,213 @@
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$dark: #2d2d3e;
+$text: #4a4a5a;
+$text-light: #8a8a9a;
+
+.leaderboard-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 32px 60px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 36px;
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: $dark;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .crown-icon {
+      color: #faad14;
+      font-size: 26px;
+    }
+  }
+
+  .page-sub {
+    color: $text-light;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.sort-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-pill {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1.5px solid #e8e4f4;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-light;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: $purple-mid;
+    color: $purple-mid;
+  }
+
+  &.active {
+    background: linear-gradient(135deg, $purple-mid, #5a9fd4);
+    border-color: transparent;
+    color: white;
+  }
+}
+
+/* Podium */
+.podium-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.podium-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 20px 20px;
+  border-radius: 18px;
+  background: #f7f5ff;
+  min-width: 160px;
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-4px); }
+
+  &.gold {
+    background: linear-gradient(135deg, #fff9e6, #fff3c6);
+    min-width: 190px;
+    padding-top: 32px;
+    box-shadow: 0 6px 24px rgba(250, 173, 20, 0.18);
+  }
+
+  &.silver {
+    background: linear-gradient(135deg, #f5f5ff, #ebebff);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+
+  &.bronze {
+    background: linear-gradient(135deg, #fff8f0, #ffe8cc);
+    box-shadow: 0 4px 16px rgba(212, 107, 8, 0.12);
+  }
+}
+
+.podium-rank { font-size: 28px; line-height: 1; }
+
+.podium-avatar {
+  background: linear-gradient(135deg, $purple-mid, #5a9fd4) !important;
+  font-weight: 700 !important;
+  width: 52px !important;
+  height: 52px !important;
+  line-height: 52px !important;
+  font-size: 18px !important;
+
+  &.avatar-gold {
+    width: 64px !important;
+    height: 64px !important;
+    line-height: 64px !important;
+    font-size: 22px !important;
+  }
+}
+
+.podium-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: $dark;
+  text-align: center;
+}
+
+.podium-val {
+  font-size: 13px;
+  color: $text-light;
+  font-weight: 500;
+}
+
+/* Full table */
+.lb-table {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+  overflow: hidden;
+}
+
+.lb-header {
+  display: grid;
+  grid-template-columns: 56px 1fr 140px 100px 100px 90px;
+  padding: 12px 20px;
+  background: #f8f5ff;
+  border-bottom: 1px solid #f0edf8;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-light;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 56px 1fr 140px 100px 100px 90px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f9f7fe;
+  align-items: center;
+  transition: background 0.15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #faf8ff; }
+
+  &.top3 { background: #fdfcff; }
+}
+
+.lb-col-rank { display: flex; align-items: center; }
+.rank-medal  { font-size: 20px; }
+.rank-num    { font-size: 15px; font-weight: 700; color: $text-light; }
+
+.lb-col-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row-avatar {
+  background: linear-gradient(135deg, $purple-mid, #5a9fd4) !important;
+  font-weight: 600 !important;
+  flex-shrink: 0;
+}
+
+.lb-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: $dark;
+}
+
+.lb-val {
+  font-size: 14px;
+  color: $text;
+}
+
+.lb-val-highlight {
+  font-size: 15px;
+  font-weight: 700;
+  color: $purple-mid;
+}
+
+.lb-col-val,
+.lb-col-extra { font-size: 14px; color: $text; }

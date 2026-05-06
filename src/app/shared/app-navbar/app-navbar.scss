@@ -12,7 +12,7 @@ $text-light: #8a8a9a;
   border-bottom: 1px solid rgba(195, 177, 225, 0.25);
 
   .nav-inner {
-    max-width: 1140px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 32px;
     height: 60px;
@@ -45,7 +45,8 @@ $text-light: #8a8a9a;
   .nav-links {
     flex: 1;
     display: flex;
-    gap: 24px;
+    gap: 20px;
+    flex-wrap: wrap;
 
     a {
       color: $text;
@@ -54,6 +55,7 @@ $text-light: #8a8a9a;
       padding: 4px 0;
       border-bottom: 2px solid transparent;
       transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
 
       &:hover { color: $purple-mid; }
 
@@ -62,18 +64,45 @@ $text-light: #8a8a9a;
         border-bottom-color: $purple-mid;
         font-weight: 600;
       }
+
+      &.admin-link {
+        color: #e06040;
+        &:hover { color: #c04020; }
+        &.active { color: #e06040; border-bottom-color: #e06040; }
+      }
     }
   }
 
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 
     .user-name {
       font-size: 13px;
       color: $text;
       font-weight: 500;
+      white-space: nowrap;
     }
+  }
+}
+
+.dark-toggle {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: $text-light;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgba(155, 127, 212, 0.12);
+    color: $purple-mid;
   }
 }

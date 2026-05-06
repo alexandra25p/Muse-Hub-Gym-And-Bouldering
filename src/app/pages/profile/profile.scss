@@ -5,9 +5,12 @@ $text: #4a4a5a;
 $text-light: #8a8a9a;
 
 .profile-page {
-  max-width: 600px;
+  max-width: 700px;
   margin: 48px auto;
-  padding: 0 24px;
+  padding: 0 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .profile-card {
@@ -102,4 +105,99 @@ $text-light: #8a8a9a;
   gap: 8px;
   justify-content: flex-end;
   margin-top: 8px;
+}
+
+/* Achievements */
+.achievements-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(155, 127, 212, 0.1);
+  padding: 36px;
+}
+
+.achievements-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $dark;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span[nz-icon] {
+    color: #faad14;
+    font-size: 20px;
+  }
+}
+
+.achievements-sub {
+  font-size: 13px;
+  color: $text-light;
+  margin: 0 0 24px;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 12px;
+}
+
+.badge-card {
+  position: relative;
+  border-radius: 14px;
+  padding: 18px 14px 14px;
+  border: 1.5px solid #f0edf8;
+  background: #faf8ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  opacity: 0.55;
+
+  &.earned {
+    opacity: 1;
+    border-color: transparent;
+    background: linear-gradient(135deg, #f5f0ff, #eef6ff);
+    box-shadow: 0 2px 12px rgba(155, 127, 212, 0.15);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(155, 127, 212, 0.2);
+    }
+  }
+}
+
+.badge-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.badge-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: $dark;
+}
+
+.badge-desc {
+  font-size: 11px;
+  color: $text-light;
+  line-height: 1.4;
+}
+
+.badge-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #52c41a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
 }

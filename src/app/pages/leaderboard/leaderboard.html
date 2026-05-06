@@ -1,0 +1,74 @@
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="leaderboard-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">
+        <span nz-icon nzType="crown" nzTheme="outline" class="crown-icon"></span>
+        Leaderboard
+      </h1>
+      <p class="page-sub">Top performers at MuseHub this month</p>
+    </div>
+    <div class="sort-pills">
+      <button class="sort-pill" [class.active]="sortBy() === 'kcal'"    (click)="sortBy.set('kcal')">🔥 Kcal</button>
+      <button class="sort-pill" [class.active]="sortBy() === 'flashed'" (click)="sortBy.set('flashed')">⚡ Flashed</button>
+      <button class="sort-pill" [class.active]="sortBy() === 'streak'"  (click)="sortBy.set('streak')">📅 Streak</button>
+    </div>
+  </div>
+
+  <!-- Podium (top 3) -->
+  <div class="podium-row">
+    @for (member of podium(); track member.name; let i = $index) {
+      <div class="podium-card" [class.gold]="rankOf(member) === 1" [class.silver]="rankOf(member) === 2" [class.bronze]="rankOf(member) === 3">
+        <div class="podium-rank" [style.color]="medalColor(rankOf(member))">
+          @if (rankOf(member) === 1) { 🥇 }
+          @else if (rankOf(member) === 2) { 🥈 }
+          @else { 🥉 }
+        </div>
+        <nz-avatar [nzText]="member.initials" class="podium-avatar" [class.avatar-gold]="rankOf(member) === 1"></nz-avatar>
+        <span class="podium-name">{{ member.name }}</span>
+        <span class="podium-val">
+          @if (sortBy() === 'kcal')    { {{ member.kcal | number }} kcal }
+          @else if (sortBy() === 'flashed') { {{ member.flashed }} flashed }
+          @else { {{ member.streak }}-day streak }
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- Full table -->
+  <div class="lb-table">
+    <div class="lb-header">
+      <span class="lb-col-rank">Rank</span>
+      <span class="lb-col-member">Member</span>
+      <span class="lb-col-val">{{ sortLabels[sortBy()] }}</span>
+      <span class="lb-col-extra">Kcal</span>
+      <span class="lb-col-extra">Flashed</span>
+      <span class="lb-col-extra">Streak</span>
+    </div>
+
+    @for (member of sorted(); track member.name; let i = $index) {
+      <div class="lb-row" [class.top3]="i < 3">
+        <span class="lb-col-rank">
+          @if (i < 3) {
+            <span class="rank-medal">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</span>
+          } @else {
+            <span class="rank-num">{{ i + 1 }}</span>
+          }
+        </span>
+        <span class="lb-col-member">
+          <nz-avatar [nzText]="member.initials" nzSize="small" class="row-avatar"></nz-avatar>
+          <span class="lb-name">{{ member.name }}</span>
+        </span>
+        <span class="lb-col-val lb-val-highlight">
+          @if (sortBy() === 'kcal')    { {{ member.kcal | number }} }
+          @else if (sortBy() === 'flashed') { {{ member.flashed }} }
+          @else { {{ member.streak }} }
+        </span>
+        <span class="lb-col-extra lb-val">{{ member.kcal | number }}</span>
+        <span class="lb-col-extra lb-val">{{ member.flashed }}</span>
+        <span class="lb-col-extra lb-val">{{ member.streak }}d</span>
+      </div>
+    }
+  </div>
+</div>

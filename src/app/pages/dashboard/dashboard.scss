@@ -189,9 +189,66 @@ $text-light: #8a8a9a;
   }
 }
 
+/* Activity feed */
+.activity-feed {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+  overflow: hidden;
+}
+
+.feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0edf8;
+  transition: background 0.15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #faf8ff; }
+}
+
+.feed-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+
+  &.dot-fitness    { background: $purple-mid; }
+  &.dot-bouldering { background: $blue-mid; }
+}
+
+.feed-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.feed-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feed-tag { line-height: 1; }
+
+.feed-meta {
+  font-size: 12px;
+  color: $text-light;
+}
+
+.feed-detail {
+  font-size: 13px;
+  color: $text;
+}
+
+/* Quick actions */
 .quick-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 16px;
 }
 
@@ -229,4 +286,73 @@ $text-light: #8a8a9a;
     background: linear-gradient(135deg, #eafaff, #d0f4ff);
     color: #1a7a8a;
   }
+
+  &.action-admin {
+    background: linear-gradient(135deg, #fff5f0, #ffe8e0);
+    color: #c04020;
+  }
+}
+
+/* Onboarding modal */
+.onboarding-inner {
+  padding: 4px 0 8px;
+}
+
+.onboarding-sub {
+  color: #6a6a8a;
+  font-size: 15px;
+  margin: 0 0 24px;
+}
+
+.onboarding-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.option-pill {
+  padding: 10px 22px;
+  border-radius: 24px;
+  border: 2px solid #e8e4f4;
+  background: white;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6a6a8a;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $purple-mid;
+    color: $purple-mid;
+  }
+
+  &.selected {
+    background: linear-gradient(135deg, $purple-mid, $blue-mid);
+    border-color: transparent;
+    color: white;
+  }
+}
+
+.onboarding-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.onboarding-steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0cce8;
+  transition: background 0.2s;
+
+  &.active { background: $purple-mid; }
 }

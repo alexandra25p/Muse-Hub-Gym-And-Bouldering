@@ -1,0 +1,144 @@
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">
+        <span nz-icon nzType="setting" nzTheme="outline"></span>
+        Admin Panel
+      </h1>
+      <p class="page-sub">Manage members and track class attendance</p>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <span class="as-num">{{ members().length }}</span>
+        <span class="as-label">Total Members</span>
+      </div>
+      <div class="admin-stat">
+        <span class="as-num">{{ activeCount() }}</span>
+        <span class="as-label">Active</span>
+      </div>
+      <div class="admin-stat">
+        <span class="as-num">{{ classes().length }}</span>
+        <span class="as-label">Classes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Member Management -->
+  <section class="admin-section">
+    <h2 class="admin-section-title">
+      <span nz-icon nzType="team" nzTheme="outline"></span>
+      Member Management
+    </h2>
+
+    <nz-table
+      #memberTable
+      [nzData]="members()"
+      [nzPageSize]="8"
+      nzSize="middle"
+      class="member-table"
+    >
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Joined</th>
+          <th>Toggle</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (member of memberTable.data; track member.id) {
+          <tr>
+            <td>
+              <div class="member-cell">
+                <nz-avatar [nzText]="member.initials" nzSize="small" class="member-avatar"></nz-avatar>
+                <span class="member-name">{{ member.name }}</span>
+              </div>
+            </td>
+            <td class="email-cell">{{ member.email }}</td>
+            <td>
+              <nz-tag [nzColor]="member.role === 'admin' ? 'red' : 'blue'">
+                {{ member.role }}
+              </nz-tag>
+            </td>
+            <td>
+              <nz-tag [nzColor]="member.status === 'active' ? 'success' : 'default'">
+                {{ member.status }}
+              </nz-tag>
+            </td>
+            <td class="date-cell">{{ member.joinDate }}</td>
+            <td>
+              @if (member.role !== 'admin') {
+                <nz-switch
+                  [ngModel]="member.status === 'active'"
+                  (ngModelChange)="toggleStatus(member.id)"
+                  nzSize="small"
+                ></nz-switch>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </section>
+
+  <!-- Class Attendance -->
+  <section class="admin-section">
+    <h2 class="admin-section-title">
+      <span nz-icon nzType="calendar" nzTheme="outline"></span>
+      Class Attendance
+    </h2>
+    <p class="section-hint">Expand a class to mark which enrolled members attended.</p>
+
+    <div class="classes-list">
+      @for (cls of classes(); track cls.id) {
+        <div class="cls-block">
+          <div class="cls-header" (click)="toggleExpand(cls.id)">
+            <div class="cls-left">
+              <span nz-icon [nzType]="expandedClass() === cls.id ? 'down' : 'right'" nzTheme="outline" class="expand-icon"></span>
+              <span class="cls-name">{{ cls.name }}</span>
+              <nz-tag nzColor="blue">{{ cls.type }}</nz-tag>
+              <span class="cls-meta">{{ cls.day }} · {{ cls.time }}</span>
+            </div>
+            <div class="cls-right">
+              <span class="cls-enrolled">{{ cls.enrolled.length }} / {{ cls.capacity }} enrolled</span>
+              <span class="cls-attended">{{ cls.attended.length }} attended</span>
+            </div>
+          </div>
+
+          @if (expandedClass() === cls.id) {
+            <div class="cls-members">
+              @if (cls.enrolled.length === 0) {
+                <p class="no-enrolled">No members enrolled in this class.</p>
+              } @else {
+                @for (email of cls.enrolled; track email) {
+                  <div class="attendance-row">
+                    <div class="att-member">
+                      <span nz-icon nzType="user" nzTheme="outline" class="att-icon"></span>
+                      <span class="att-email">{{ email }}</span>
+                    </div>
+                    <div class="att-toggle">
+                      <nz-switch
+                        [ngModel]="isAttended(cls.id, email)"
+                        (ngModelChange)="toggleAttendance(cls.id, email, $event)"
+                        nzSize="small"
+                        nzCheckedChildren="✓"
+                        nzUnCheckedChildren="✗"
+                      ></nz-switch>
+                      <span class="att-label" [class.att-present]="isAttended(cls.id, email)">
+                        {{ isAttended(cls.id, email) ? 'Present' : 'Absent' }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+</div>

@@ -11,10 +11,22 @@
       <a routerLink="/classes" routerLinkActive="active">Classes</a>
       <a routerLink="/wall" routerLinkActive="active">Wall</a>
       <a routerLink="/journal" routerLinkActive="active">Journal</a>
+      <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
       <a routerLink="/profile" routerLinkActive="active">Profile</a>
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" class="admin-link">Admin</a>
+      }
     </div>
 
     <div class="nav-right">
+      <button class="dark-toggle" (click)="darkMode.toggle()" [title]="darkMode.dark() ? 'Light mode' : 'Dark mode'">
+        @if (darkMode.dark()) {
+          <span nz-icon nzType="sun" nzTheme="outline"></span>
+        } @else {
+          <span nz-icon nzType="bulb" nzTheme="outline"></span>
+        }
+      </button>
+
       @if (userName()) {
         <span class="user-name">{{ userName() }}</span>
       }

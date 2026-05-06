@@ -29,5 +29,15 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/wall/wall').then(m => m.Wall),
     canActivate: [authGuard],
   },
+  {
+    path: 'leaderboard',
+    loadComponent: () => import('./pages/leaderboard/leaderboard').then(m => m.Leaderboard),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin/admin').then(m => m.Admin),
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

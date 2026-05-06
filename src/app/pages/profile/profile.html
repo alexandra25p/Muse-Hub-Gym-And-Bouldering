@@ -28,6 +28,18 @@
           <span class="info-label">Membership</span>
           <span class="info-value">Active · Monthly</span>
         </div>
+        @if (user()?.fitnessGoal) {
+          <div class="info-row">
+            <span class="info-label">Fitness Goal</span>
+            <span class="info-value">{{ user()?.fitnessGoal }}</span>
+          </div>
+        }
+        @if (user()?.experienceLevel) {
+          <div class="info-row">
+            <span class="info-label">Experience</span>
+            <span class="info-value">{{ user()?.experienceLevel }}</span>
+          </div>
+        }
         <button nz-button nzType="primary" class="edit-btn" (click)="startEdit()">Edit Profile</button>
       </div>
     } @else {
@@ -47,5 +59,29 @@
         </form>
       </div>
     }
+  </div>
+
+  <div class="achievements-card">
+    <h3 class="achievements-title">
+      <span nz-icon nzType="trophy" nzTheme="outline"></span>
+      Achievements
+    </h3>
+    <p class="achievements-sub">{{ achievements().filter(a => a.earned).length }} / {{ achievements().length }} unlocked</p>
+    <div class="badges-grid">
+      @for (badge of achievements(); track badge.id) {
+        <div class="badge-card" [class.earned]="badge.earned">
+          <div class="badge-icon" [style.color]="badge.earned ? badge.color : '#c8c8d8'">
+            <span nz-icon [nzType]="badge.icon" nzTheme="outline"></span>
+          </div>
+          <span class="badge-name">{{ badge.label }}</span>
+          <span class="badge-desc">{{ badge.desc }}</span>
+          @if (badge.earned) {
+            <div class="badge-check">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
 </div>

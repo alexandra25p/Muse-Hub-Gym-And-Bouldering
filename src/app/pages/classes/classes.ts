@@ -130,7 +130,7 @@ export class Classes {
       Object.values(this.form.controls).forEach(c => c.markAsDirty());
       return;
     }
-    const val = this.form.value as Omit<GymClass, 'id' | 'enrolled'>;
+    const val = this.form.value as Omit<GymClass, 'id' | 'enrolled' | 'attended'>;
     if (this.editingId === null) {
       this.classesService.addClass(val);
     } else {

@@ -1,0 +1,241 @@
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$dark: #2d2d3e;
+$text: #4a4a5a;
+$text-light: #8a8a9a;
+
+.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 60px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+
+  .page-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: $dark;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    span[nz-icon] { color: #e06040; font-size: 24px; }
+  }
+
+  .page-sub {
+    color: $text-light;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.admin-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.admin-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9f7ff;
+  border-radius: 12px;
+  padding: 14px 20px;
+  min-width: 80px;
+
+  .as-num {
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(135deg, $purple-mid, $purple-dark);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .as-label {
+    font-size: 12px;
+    color: $text-light;
+    margin-top: 4px;
+  }
+}
+
+.admin-section {
+  margin-bottom: 48px;
+}
+
+.admin-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: $dark;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span[nz-icon] { color: $purple-mid; }
+}
+
+.section-hint {
+  font-size: 13px;
+  color: $text-light;
+  margin: -8px 0 16px;
+}
+
+/* Member table */
+.member-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+}
+
+.member-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member-avatar {
+  background: linear-gradient(135deg, $purple-mid, #5a9fd4) !important;
+  font-weight: 600 !important;
+  flex-shrink: 0;
+}
+
+.member-name {
+  font-weight: 600;
+  color: $dark;
+  font-size: 14px;
+}
+
+.email-cell, .date-cell {
+  font-size: 13px;
+  color: $text-light;
+}
+
+/* Class attendance */
+.classes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cls-block {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #f0edf8;
+  background: white;
+  box-shadow: 0 1px 8px rgba(155, 127, 212, 0.06);
+}
+
+.cls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  &:hover { background: #faf8ff; }
+}
+
+.cls-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.expand-icon {
+  color: $text-light;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.cls-name {
+  font-weight: 600;
+  color: $dark;
+  font-size: 15px;
+}
+
+.cls-meta {
+  font-size: 13px;
+  color: $text-light;
+}
+
+.cls-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.cls-enrolled {
+  font-size: 13px;
+  color: $text-light;
+}
+
+.cls-attended {
+  font-size: 13px;
+  font-weight: 600;
+  color: #52c41a;
+}
+
+.cls-members {
+  border-top: 1px solid #f0edf8;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fdfcff;
+}
+
+.no-enrolled {
+  color: $text-light;
+  font-size: 13px;
+  font-style: italic;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.attendance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #f0edf8;
+}
+
+.att-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .att-icon { color: $text-light; }
+  .att-email { font-size: 13px; color: $text; }
+}
+
+.att-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.att-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-light;
+
+  &.att-present { color: #52c41a; }
+}

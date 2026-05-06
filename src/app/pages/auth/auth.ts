@@ -16,6 +16,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { UserService } from '../../services/user.service';
 
 function passwordStrengthValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -65,7 +66,7 @@ export class Auth {
   loginError = '';
   signupError = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private userService: UserService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -95,10 +96,7 @@ export class Auth {
 
     setTimeout(() => {
       if (email === 'admin@muse.com' && password === 'Password1!') {
-        const user = { email, name: 'Admin' };
-        rememberMe
-          ? localStorage.setItem('user', JSON.stringify(user))
-          : sessionStorage.setItem('user', JSON.stringify(user));
+        this.userService.setUser({ email, name: 'Admin', onboardingDone: true }, rememberMe);
         this.router.navigate(['/dashboard']);
       } else {
         this.loginError = 'Invalid email or password.';
@@ -117,8 +115,7 @@ export class Auth {
     const { firstName, lastName, email } = this.signupForm.value;
 
     setTimeout(() => {
-      const user = { email, name: `${firstName} ${lastName}` };
-      localStorage.setItem('user', JSON.stringify(user));
+      this.userService.setUser({ email, name: `${firstName} ${lastName}`, onboardingDone: false }, true);
       this.router.navigate(['/dashboard']);
       this.signupLoading = false;
     }, 800);

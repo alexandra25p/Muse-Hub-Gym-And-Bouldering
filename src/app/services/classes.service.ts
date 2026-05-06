@@ -9,14 +9,15 @@ export interface GymClass {
   time: string;
   capacity: number;
   enrolled: string[];
+  attended: string[];
 }
 
 const SEED: GymClass[] = [
-  { id: 1, name: 'Morning Yoga', type: 'Yoga', instructor: 'Ana Ionescu', day: 'Monday', time: '08:00', capacity: 15, enrolled: [] },
-  { id: 2, name: 'HIIT Blast', type: 'HIIT', instructor: 'Mihai Pop', day: 'Tuesday', time: '18:00', capacity: 20, enrolled: [] },
-  { id: 3, name: 'Boulder Basics', type: 'Bouldering', instructor: 'Radu Stan', day: 'Wednesday', time: '17:00', capacity: 12, enrolled: [] },
-  { id: 4, name: 'Strength & Core', type: 'Strength', instructor: 'Elena Marin', day: 'Thursday', time: '19:00', capacity: 18, enrolled: [] },
-  { id: 5, name: 'Weekend Climb', type: 'Bouldering', instructor: 'Radu Stan', day: 'Saturday', time: '10:00', capacity: 10, enrolled: [] },
+  { id: 1, name: 'Morning Yoga', type: 'Yoga', instructor: 'Ana Ionescu', day: 'Monday', time: '08:00', capacity: 15, enrolled: [], attended: [] },
+  { id: 2, name: 'HIIT Blast', type: 'HIIT', instructor: 'Mihai Pop', day: 'Tuesday', time: '18:00', capacity: 20, enrolled: [], attended: [] },
+  { id: 3, name: 'Boulder Basics', type: 'Bouldering', instructor: 'Radu Stan', day: 'Wednesday', time: '17:00', capacity: 12, enrolled: [], attended: [] },
+  { id: 4, name: 'Strength & Core', type: 'Strength', instructor: 'Elena Marin', day: 'Thursday', time: '19:00', capacity: 18, enrolled: [], attended: [] },
+  { id: 5, name: 'Weekend Climb', type: 'Bouldering', instructor: 'Radu Stan', day: 'Saturday', time: '10:00', capacity: 10, enrolled: [], attended: [] },
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -47,15 +48,31 @@ export class ClassesService {
     return cls ? cls.enrolled.length >= cls.capacity : false;
   }
 
-  addClass(data: Omit<GymClass, 'id' | 'enrolled'>): void {
+  markAttendance(classId: number, email: string, present: boolean): void {
+    this.classes.update(list =>
+      list.map(c => {
+        if (c.id !== classId) return c;
+        const attended = present
+          ? [...new Set([...c.attended, email])]
+          : c.attended.filter(e => e !== email);
+        return { ...c, attended };
+      })
+    );
+  }
+
+  isAttended(classId: number, email: string): boolean {
+    return this.classes().find(c => c.id === classId)?.attended.includes(email) ?? false;
+  }
+
+  addClass(data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): void {
     const id = this.nextId();
-    this.classes.update(list => [...list, { id, enrolled: [], ...data }]);
+    this.classes.update(list => [...list, { id, enrolled: [], attended: [], ...data }]);
     this.nextId.update(n => n + 1);
   }
 
-  updateClass(id: number, data: Omit<GymClass, 'id' | 'enrolled'>): void {
+  updateClass(id: number, data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): void {
     this.classes.update(list =>
-      list.map(c => (c.id === id ? { id, enrolled: c.enrolled, ...data } : c))
+      list.map(c => (c.id === id ? { id, enrolled: c.enrolled, attended: c.attended, ...data } : c))
     );
   }
 
