@@ -42,6 +42,10 @@
         </nz-form-control>
       </nz-form-item>
 
+      <nz-form-item>
+        <label nz-checkbox formControlName="rememberMe">Remember me</label>
+      </nz-form-item>
+
       @if (errorMessage) {
         <nz-alert nzType="error" [nzMessage]="errorMessage" nzShowIcon style="margin-bottom: 16px" />
       }
