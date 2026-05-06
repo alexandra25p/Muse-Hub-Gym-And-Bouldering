@@ -1,0 +1,73 @@
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$dark: #2d2d3e;
+$text: #4a4a5a;
+$text-light: #8a8a9a;
+
+.classes-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: $dark;
+    margin: 0 0 4px;
+  }
+
+  .page-sub {
+    color: $text-light;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.toolbar {
+  margin-bottom: 20px;
+
+  .search-input {
+    max-width: 380px;
+  }
+}
+
+.classes-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(155, 127, 212, 0.08);
+
+  .name-cell {
+    font-weight: 600;
+    color: $dark;
+  }
+
+  .actions-cell {
+    display: flex;
+    gap: 4px;
+  }
+}
+
+.modal-form {
+  padding: 8px 0 0;
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}

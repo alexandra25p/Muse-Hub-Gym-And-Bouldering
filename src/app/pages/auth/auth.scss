@@ -1,33 +1,120 @@
-.auth-container {
+$purple: #C3B1E1;
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$mint: #BDF2FF;
+$periwinkle: #B9BFFF;
+$text-light: #8a8a9a;
+
+.auth-page {
   min-height: 100vh;
+  background: linear-gradient(145deg, #f5f0ff 0%, #eef4ff 55%, #eafaff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 16px;
+}
+
+.blobs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.45;
+
+  &.blob-purple {
+    width: 520px;
+    height: 520px;
+    background: $purple;
+    right: -80px;
+    top: -100px;
+  }
+
+  &.blob-blue {
+    width: 420px;
+    height: 420px;
+    background: $mint;
+    left: -100px;
+    bottom: -100px;
+  }
+
+  &.blob-mint {
+    width: 300px;
+    height: 300px;
+    background: $periwinkle;
+    right: 40px;
+    bottom: 80px;
+  }
+}
+
+.auth-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: $purple-dark;
+  }
+
+  .brand-sep {
+    color: $text-light;
+  }
+
+  .brand-sub {
+    font-size: 13px;
+    color: $text-light;
+  }
 }
 
 .auth-card {
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(155, 127, 212, 0.12);
+  overflow: hidden;
 }
 
-.auth-header {
-  text-align: center;
-  margin-bottom: 32px;
+.auth-form {
+  padding: 8px 24px 24px;
 
-  h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #1a1a1a;
+  .name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
-  p {
-    color: #888;
-    margin: 0;
-    font-size: 14px;
-    letter-spacing: 0.5px;
+  .switch-tab {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: $text-light;
+
+    a {
+      color: $purple-mid;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

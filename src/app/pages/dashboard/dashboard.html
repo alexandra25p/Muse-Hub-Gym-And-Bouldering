@@ -1,1 +1,72 @@
-<p>dashboard works!</p>
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="dashboard-page">
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>Welcome back, <span class="name-highlight">{{ user()?.name ?? 'Member' }}</span></h1>
+      <p>Here's what's happening at MuseHub this week.</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-purple">
+      <span nz-icon nzType="trophy" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">Active</span>
+      <span class="stat-label">Membership</span>
+    </div>
+    <div class="stat-card stat-blue">
+      <span nz-icon nzType="calendar" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">3</span>
+      <span class="stat-label">Classes This Week</span>
+    </div>
+    <div class="stat-card stat-purple">
+      <span nz-icon nzType="edit" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">7</span>
+      <span class="stat-label">Journal Entries</span>
+    </div>
+    <div class="stat-card stat-blue">
+      <span nz-icon nzType="fire" nzTheme="outline" class="stat-icon"></span>
+      <span class="stat-num">12</span>
+      <span class="stat-label">Day Streak</span>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Upcoming Classes</h2>
+      <a routerLink="/classes" class="see-all">See all →</a>
+    </div>
+    <div class="upcoming-list">
+      @for (cls of upcomingClasses; track cls.name) {
+        <div class="class-row">
+          <div class="class-info">
+            <span class="class-name">{{ cls.name }}</span>
+            <span class="class-meta">{{ cls.instructor }}</span>
+          </div>
+          <div class="class-right">
+            <nz-tag [nzColor]="cls.color">{{ cls.type }}</nz-tag>
+            <span class="class-time">{{ cls.day }} · {{ cls.time }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2>Quick Actions</h2>
+    <div class="quick-actions">
+      <a routerLink="/classes" class="action-card action-purple">
+        <span nz-icon nzType="schedule" nzTheme="outline"></span>
+        <span>View Schedule</span>
+      </a>
+      <a routerLink="/journal" class="action-card action-blue">
+        <span nz-icon nzType="book" nzTheme="outline"></span>
+        <span>Open Journal</span>
+      </a>
+      <a routerLink="/profile" class="action-card action-mint">
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+        <span>Edit Profile</span>
+      </a>
+    </div>
+  </div>
+</div>

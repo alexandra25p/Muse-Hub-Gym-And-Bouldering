@@ -1,0 +1,26 @@
+<nav class="app-nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="brand-name">MuseHub</span>
+      <span class="brand-sep">|</span>
+      <span class="brand-sub">Gym & Bouldering</span>
+    </div>
+
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/classes" routerLinkActive="active">Classes</a>
+      <a routerLink="/journal" routerLinkActive="active">Journal</a>
+      <a routerLink="/profile" routerLinkActive="active">Profile</a>
+    </div>
+
+    <div class="nav-right">
+      @if (userName()) {
+        <span class="user-name">{{ userName() }}</span>
+      }
+      <button nz-button nzSize="small" (click)="logoutClick.emit()">
+        <span nz-icon nzType="logout"></span>
+        Sign Out
+      </button>
+    </div>
+  </div>
+</nav>

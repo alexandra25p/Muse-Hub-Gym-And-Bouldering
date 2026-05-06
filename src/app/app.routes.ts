@@ -1,18 +1,28 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
-import { Auth } from './pages/auth/auth';
-import { Classes } from './pages/classes/classes';
-import { Dashboard } from './pages/dashboard/dashboard';
-import { Home } from './pages/home/home';
-import { Journal } from './pages/journal/journal';
-import { Profile } from './pages/profile/profile';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'login', component: Auth },
-  { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
-  { path: 'journal', component: Journal, canActivate: [authGuard] },
-  { path: 'classes', component: Classes, canActivate: [authGuard] },
-  { path: 'profile', component: Profile, canActivate: [authGuard] },
+  { path: '', loadComponent: () => import('./pages/home/home').then(m => m.Home) },
+  { path: 'login', loadComponent: () => import('./pages/auth/auth').then(m => m.Auth) },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'journal',
+    loadComponent: () => import('./pages/journal/journal').then(m => m.Journal),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'classes',
+    loadComponent: () => import('./pages/classes/classes').then(m => m.Classes),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./pages/profile/profile').then(m => m.Profile),
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

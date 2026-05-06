@@ -1,0 +1,105 @@
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$dark: #2d2d3e;
+$text: #4a4a5a;
+$text-light: #8a8a9a;
+
+.profile-page {
+  max-width: 600px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(155, 127, 212, 0.1);
+  padding: 36px;
+}
+
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  .avatar {
+    background: linear-gradient(135deg, $purple-mid, #5a9fd4) !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    width: 72px !important;
+    height: 72px !important;
+    line-height: 72px !important;
+    flex-shrink: 0;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .user-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: $dark;
+      margin: 0;
+    }
+
+    .user-email {
+      font-size: 14px;
+      color: $text-light;
+    }
+
+    .member-tag {
+      margin-top: 4px;
+      width: fit-content;
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: #f0edf8;
+  margin: 28px 0;
+}
+
+.info-section {
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: $dark;
+    margin: 0 0 20px;
+  }
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f9f7fe;
+
+  &:last-of-type { border-bottom: none; }
+
+  .info-label {
+    font-size: 14px;
+    color: $text-light;
+    font-weight: 500;
+  }
+
+  .info-value {
+    font-size: 14px;
+    color: $dark;
+    font-weight: 500;
+  }
+}
+
+.edit-btn {
+  margin-top: 24px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}

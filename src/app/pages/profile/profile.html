@@ -1,1 +1,51 @@
-<p>profile works!</p>
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="profile-page">
+  <div class="profile-card">
+    <div class="avatar-section">
+      <nz-avatar [nzText]="initials" nzSize="large" class="avatar"></nz-avatar>
+      <div class="user-info">
+        <h2 class="user-name">{{ user()?.name ?? '—' }}</h2>
+        <span class="user-email">{{ user()?.email ?? '' }}</span>
+        <nz-tag nzColor="purple" class="member-tag">Active Member</nz-tag>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    @if (!editing()) {
+      <div class="info-section">
+        <h3>Account Details</h3>
+        <div class="info-row">
+          <span class="info-label">Full Name</span>
+          <span class="info-value">{{ user()?.name ?? '—' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ user()?.email ?? '—' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Membership</span>
+          <span class="info-value">Active · Monthly</span>
+        </div>
+        <button nz-button nzType="primary" class="edit-btn" (click)="startEdit()">Edit Profile</button>
+      </div>
+    } @else {
+      <div class="info-section">
+        <h3>Edit Profile</h3>
+        <form nz-form [formGroup]="form" (ngSubmit)="saveEdit()">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24">Full Name</nz-form-label>
+            <nz-form-control [nzSpan]="24" nzErrorTip="Name is required">
+              <input nz-input formControlName="name" placeholder="Your full name" />
+            </nz-form-control>
+          </nz-form-item>
+          <div class="form-actions">
+            <button nz-button type="button" (click)="editing.set(false)">Cancel</button>
+            <button nz-button nzType="primary" htmlType="submit">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>

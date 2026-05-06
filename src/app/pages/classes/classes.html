@@ -1,1 +1,174 @@
-<p>classes works!</p>
+<app-navbar [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-navbar>
+
+<div class="classes-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Classes</h1>
+      <p class="page-sub">Browse and manage the weekly schedule</p>
+    </div>
+    <button nz-button nzType="primary" (click)="openAdd()">
+      <span nz-icon nzType="plus"></span>
+      Add Class
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <nz-input-group [nzPrefix]="searchIcon" class="search-input">
+      <input
+        nz-input
+        placeholder="Search by name, type, instructor or day…"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </nz-input-group>
+    <ng-template #searchIcon><span nz-icon nzType="search"></span></ng-template>
+  </div>
+
+  <nz-table
+    #table
+    [nzData]="filtered()"
+    [nzFrontPagination]="true"
+    [nzPageSize]="8"
+    nzShowSizeChanger
+    class="classes-table"
+  >
+    <thead>
+      <tr>
+        <th
+          nzColumnKey="name"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('name', $event)"
+        >Name</th>
+        <th
+          nzColumnKey="type"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('type', $event)"
+        >Type</th>
+        <th
+          nzColumnKey="instructor"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('instructor', $event)"
+        >Instructor</th>
+        <th
+          nzColumnKey="day"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('day', $event)"
+        >Day</th>
+        <th
+          nzColumnKey="time"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('time', $event)"
+        >Time</th>
+        <th
+          nzColumnKey="capacity"
+          [nzSortFn]="true"
+          (nzSortOrderChange)="onSortChange('capacity', $event)"
+        >Capacity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cls of table.data; track cls.id) {
+        <tr>
+          <td class="name-cell">{{ cls.name }}</td>
+          <td>
+            <nz-tag [nzColor]="typeColors[cls.type]">{{ cls.type }}</nz-tag>
+          </td>
+          <td>{{ cls.instructor }}</td>
+          <td>{{ cls.day }}</td>
+          <td>{{ cls.time }}</td>
+          <td>{{ cls.capacity }}</td>
+          <td class="actions-cell">
+            <button nz-button nzType="text" nzSize="small" (click)="openEdit(cls)">
+              <span nz-icon nzType="edit"></span>
+            </button>
+            <button
+              nz-button
+              nzType="text"
+              nzSize="small"
+              nzDanger
+              nz-popconfirm
+              nzPopconfirmTitle="Delete this class?"
+              (nzOnConfirm)="delete(cls.id)"
+            >
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzTitle]="editingId === null ? 'Add Class' : 'Edit Class'"
+  [nzFooter]="null"
+  (nzOnCancel)="modalVisible = false"
+  nzWidth="480px"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="saveModal()" class="modal-form">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Class Name</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+          <input nz-input formControlName="name" placeholder="e.g. Morning Yoga" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="two-col">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Type</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <nz-select formControlName="type" nzPlaceHolder="Select type">
+              @for (t of typeOptions; track t) {
+                <nz-option [nzValue]="t" [nzLabel]="t"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Capacity</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="1–100">
+            <nz-input-number formControlName="capacity" [nzMin]="1" [nzMax]="100" style="width:100%"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Instructor</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+          <input nz-input formControlName="instructor" placeholder="Full name" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="two-col">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Day</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <nz-select formControlName="day" nzPlaceHolder="Select day">
+              @for (d of dayOptions; track d) {
+                <nz-option [nzValue]="d" [nzLabel]="d"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Time</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Required">
+            <input nz-input formControlName="time" type="time" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="modal-footer">
+        <button nz-button (click)="modalVisible = false" type="button">Cancel</button>
+        <button nz-button nzType="primary" htmlType="submit">
+          {{ editingId === null ? 'Add Class' : 'Save Changes' }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
