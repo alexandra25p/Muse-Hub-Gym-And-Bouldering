@@ -1,0 +1,219 @@
+$purple: #C3B1E1;
+$purple-mid: #9b7fd4;
+$purple-dark: #6a4a9a;
+$mint: #BDF2FF;
+$periwinkle: #B9BFFF;
+$text-light: #8a8a9a;
+$text: #4a4a5a;
+
+.signup-page {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f5f0ff 0%, #eef4ff 55%, #eafaff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 16px;
+}
+
+.blobs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.45;
+
+  &.blob-purple {
+    width: 520px;
+    height: 520px;
+    background: $purple;
+    right: -80px;
+    top: -100px;
+  }
+
+  &.blob-blue {
+    width: 420px;
+    height: 420px;
+    background: $mint;
+    left: -100px;
+    bottom: -100px;
+  }
+
+  &.blob-mint {
+    width: 300px;
+    height: 300px;
+    background: $periwinkle;
+    right: 40px;
+    bottom: 80px;
+  }
+}
+
+.signup-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.signup-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: $purple-dark;
+  }
+
+  .brand-sep { color: $text-light; }
+  .brand-sub { font-size: 13px; color: $text-light; }
+}
+
+.signup-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  box-shadow: 0 8px 40px rgba(155, 127, 212, 0.12);
+  padding: 28px;
+  backdrop-filter: blur(8px);
+}
+
+.signup-header {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0 0 8px;
+    color: $text;
+    font-size: clamp(28px, 4vw, 40px);
+  }
+
+  p {
+    margin: 0;
+    color: $text-light;
+  }
+}
+
+.signup-form {
+  display: grid;
+  gap: 16px;
+
+  label {
+    display: grid;
+    gap: 8px;
+    color: $text;
+    font-size: 14px;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border: 1px solid rgba(155, 127, 212, 0.18);
+    border-radius: 16px;
+    padding: 12px 14px;
+    background: #fff;
+    outline: none;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: $purple-mid;
+    box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.14);
+  }
+
+  label {
+    align-content: start;
+  }
+}
+
+.field-error {
+  color: #d4380d;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.field-error-slot {
+  min-height: 1.6rem;
+  display: block;
+}
+
+.photo-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.photo-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(155, 127, 212, 0.18), rgba(90, 159, 212, 0.18));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: $purple-dark;
+  font-weight: 700;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.photo-actions {
+  display: grid;
+  gap: 6px;
+
+  p {
+    margin: 0;
+    color: $text-light;
+    font-size: 13px;
+  }
+}
+
+.name-row,
+.grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.secondary-btn,
+.primary-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: #eef0f6;
+  color: #3b3f52;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, $purple-mid, #5a9fd4);
+  color: #fff;
+}

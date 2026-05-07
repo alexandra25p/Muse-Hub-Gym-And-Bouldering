@@ -1,0 +1,121 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(16, 18, 27, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.modal-card {
+  position: relative;
+  width: min(100%, 420px);
+  border-radius: 22px;
+  background: #fff;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(18, 18, 28, 0.28);
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-subtitle {
+  margin: 6px 0 18px;
+  color: #6f7180;
+}
+
+.modal-form {
+  display: grid;
+  gap: 14px;
+}
+
+.modal-form label {
+  display: grid;
+  gap: 6px;
+  color: #35384a;
+  font-size: 14px;
+}
+
+.modal-form input[type='email'],
+.modal-form input[type='password'] {
+  width: 100%;
+  border: 1px solid #d7d9e2;
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.toggle-password {
+  border: 0;
+  background: #eef0f6;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.modal-form input[type='email']:focus,
+.modal-form input[type='password']:focus {
+  border-color: #9b7fd4;
+  box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.15);
+}
+
+.remember-row {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-text {
+  margin: 0;
+  color: #d4380d;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.secondary-btn,
+.primary-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: #eef0f6;
+  color: #3b3f52;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #9b7fd4, #5a9fd4);
+  color: #fff;
+}

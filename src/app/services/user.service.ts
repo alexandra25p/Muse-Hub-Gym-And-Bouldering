@@ -3,6 +3,13 @@ import { Injectable, signal } from '@angular/core';
 export interface User {
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
+  city?: string;
+  profilePhoto?: string;
+  bio?: string;
+  phone?: string;
   role?: 'admin' | 'member';
   onboardingDone?: boolean;
   fitnessGoal?: string;
