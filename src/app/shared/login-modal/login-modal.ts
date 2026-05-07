@@ -4,8 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { EyeInvisibleOutline, EyeOutline } from '@ant-design/icons-angular/icons';
+
+// Importăm serviciile necesare
 import { LoginModalService } from '../../services/login-modal.service';
 import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-modal',
@@ -20,6 +23,7 @@ export class LoginModal {
   private router = inject(Router);
   private modal = inject(LoginModalService);
   private userService = inject(UserService);
+  private authService = inject(AuthService); // Serviciul nostru pentru Firebase
 
   visible = this.modal.visible;
   loginError = '';
@@ -35,25 +39,51 @@ export class LoginModal {
     this.modal.close();
     this.loginError = '';
     this.showPassword = false;
+    this.form.reset(); 
   }
 
-  submit(): void {
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  async submit(): Promise<void> {
     if (this.form.invalid) {
-      Object.values(this.form.controls).forEach(control => control.markAsDirty());
+      Object.values(this.form.controls).forEach(control => {
+        control.markAsDirty();
+        control.updateValueAndValidity();
+      });
       return;
     }
 
     const { email, password, rememberMe } = this.form.getRawValue();
 
-    if (email === 'admin@muse.com' && password === 'Password1!') {
-      this.userService.setUser({ email, name: 'Admin', onboardingDone: true }, !!rememberMe);
-      this.modal.close();
-      this.router.navigate(['/dashboard']);
-      this.form.reset({ email: '', password: '', rememberMe: false });
-      this.loginError = '';
-      return;
-    }
+    try {
+      const user = await this.authService.login(
+        (email ?? '').trim(), 
+        password ?? ''
+      );
 
-    this.loginError = 'Invalid email or password.';
+      if (user) {
+        this.userService.setUser({ 
+          email: user.email, 
+          name: user.firstName || 'User', 
+          onboardingDone: true 
+        }, !!rememberMe);
+
+        this.modal.close();
+        this.router.navigate(['/dashboard']);
+        this.form.reset();
+        this.loginError = '';
+        console.log('Logare reușită pentru:', user.email);
+      }
+    } catch (error: any) {
+      console.error('Eroare la autentificare:', error.code);
+      
+      this.loginError = 'Invalid email or password.';
+      
+      if (error.code === 'auth/wrong-password') {
+        console.warn('Parola introdusă este incorectă.');
+      }
+    }
   }
 }
