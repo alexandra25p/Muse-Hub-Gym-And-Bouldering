@@ -11,8 +11,8 @@
       <a href="#bouldering">Bouldering</a>
     </div>
     <div class="nav-actions">
-      <button nz-button routerLink="/login">Sign In</button>
-      <button nz-button nzType="primary" routerLink="/login">Join Now</button>
+      <button nz-button type="button" (click)="openLogin()">Sign In</button>
+      <button nz-button nzType="primary" type="button" routerLink="/signup">Join Now</button>
     </div>
   </div>
 </nav>
@@ -25,10 +25,10 @@
     <p class="hero-sub">Gym & Bouldering</p>
     <p class="hero-desc">Climb higher. Train stronger. Find your muse.</p>
     <div class="hero-ctas">
-      <button nz-button nzType="primary" nzSize="large" routerLink="/login">
+      <button nz-button nzType="primary" nzSize="large" type="button" routerLink="/signup">
         Get Started
       </button>
-      <button nz-button nzSize="large" routerLink="/login">
+      <button nz-button nzSize="large" type="button" (click)="openLogin()">
         Sign In
       </button>
     </div>
@@ -131,7 +131,7 @@
   <div class="cta-inner">
     <h2>Ready to find your muse?</h2>
     <p>Join hundreds of climbers and athletes at MuseHub.</p>
-    <button nz-button nzType="primary" nzSize="large" routerLink="/login">
+    <button nz-button nzType="primary" nzSize="large" type="button" routerLink="/signup">
       Join Now — It's Free
     </button>
   </div>

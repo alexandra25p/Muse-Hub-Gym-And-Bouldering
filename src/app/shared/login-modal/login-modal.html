@@ -1,0 +1,48 @@
+<div class="modal-backdrop" *ngIf="visible()" (click)="close()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <button type="button" class="close-btn" (click)="close()" aria-label="Close login popup">×</button>
+
+    <h2>Sign in</h2>
+    <p class="modal-subtitle">Use your email and password to continue.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-form">
+      <label>
+        Email
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      <label>
+        Password
+        <div class="password-field">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Your password"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <span nz-icon [nzType]="showPassword ? 'eye-invisible' : 'eye'" nzTheme="outline"></span>
+          </button>
+        </div>
+      </label>
+
+      <label class="remember-row">
+        <input type="checkbox" formControlName="rememberMe" />
+        <span>Remember me</span>
+      </label>
+
+      @if (loginError) {
+        <p class="error-text">{{ loginError }}</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="secondary-btn" (click)="close()">Cancel</button>
+        <button type="submit" class="primary-btn">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>

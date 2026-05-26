@@ -1,0 +1,156 @@
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
+
+interface SignupFormValues {
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
+  city?: string;
+  email?: string;
+  phone?: string;
+  bio?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
+const passwordPattern = /^(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+
+function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+  const password = group.get('password')?.value;
+  const confirmPassword = group.get('confirmPassword')?.value;
+
+  if (!password || !confirmPassword) return null;
+  return password === confirmPassword ? null : { passwordsMismatch: true };
+}
+
+@Component({
+  selector: 'app-signup',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './signup.html',
+  styleUrl: './signup.scss',
+})
+export class SignUp {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
+
+  @ViewChild('photoInput') photoInput?: ElementRef<HTMLInputElement>;
+
+  photoPreview = '';
+  submitted = false;
+  isLoading = false;
+  errorMessage = '';
+
+  form = this.fb.group(
+    {
+      profilePhoto: [''],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      birthDate: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      bio: [''],
+      password: ['', [Validators.required, Validators.pattern(passwordPattern)]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: passwordsMatchValidator }
+  );
+
+  pickPhoto(): void {
+    this.photoInput?.nativeElement.click();
+  }
+
+  onPhotoSelected(event: any) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e: any) => {
+    const img = new Image();
+    img.src = e.target.result;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 150; // Dimensiune mică pentru avatar
+      const MAX_HEIGHT = 150;
+      
+      let width = img.width;
+      let height = img.height;
+
+      // Calculăm proporțiile
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(img, 0, 0, width, height);
+
+      // Transformăm în Base64, dar la calitate mai mică (0.7)
+      this.photoPreview = canvas.toDataURL('image/jpeg', 0.7);
+      
+      console.log('Poza a fost micșorată! Acum are o dimensiune sigură pentru Firestore.');
+    };
+  };
+  reader.readAsDataURL(file);
+}
+
+  async submit() {
+  if (this.form.invalid) return;
+
+  try {
+    const values = this.form.getRawValue() as SignupFormValues;
+    
+    const { confirmPassword, password, ...raw } = values;
+
+    const userData = {
+      firstName: raw.firstName ?? '',
+      lastName: raw.lastName ?? '',
+      email: raw.email ?? '',
+      birthDate: raw.birthDate ?? '',
+      city: raw.city ?? '',
+      phone: raw.phone ?? '',
+      bio: raw.bio ?? '',
+      photoUrl: this.photoPreview ?? '' 
+    };
+
+    const user = await this.authService.signUp(
+      raw.email ?? '',
+      password ?? '',
+      userData as any 
+    );
+
+    console.log('Utilizator creat cu succes!', user);
+  
+
+  } catch (error) {
+    console.error('Eroare la înregistrare:', error);
+  }
+}
+
+  showError(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!control && control.invalid && (control.touched || this.submitted);
+  }
+
+  showPasswordMismatch(): boolean {
+    const confirmPassword = this.form.get('confirmPassword');
+    return !!confirmPassword && (confirmPassword.touched || this.submitted) && this.form.hasError('passwordsMismatch');
+  }
+}

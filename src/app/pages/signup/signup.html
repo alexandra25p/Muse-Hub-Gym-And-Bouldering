@@ -1,0 +1,104 @@
+<div class="signup-page">
+  <div class="blobs">
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-mint"></div>
+  </div>
+
+  <div class="signup-wrap">
+    <div class="signup-brand">
+      <span class="brand-name">MuseHub</span>
+      <span class="brand-sep">|</span>
+      <span class="brand-sub">Gym & Bouldering</span>
+    </div>
+
+    <div class="signup-card">
+      <div class="signup-header">
+        <h1>Create your account</h1>
+        <p>Fill in your details to join the community.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="signup-form">
+        <div class="photo-row">
+          <div class="photo-preview" [class.has-photo]="!!photoPreview">
+            @if (photoPreview) {
+              <img [src]="photoPreview" alt="Profile preview" />
+            } @else {
+              <span>Photo</span>
+            }
+          </div>
+          <div class="photo-actions">
+            <input #photoInput type="file" accept="image/*" hidden (change)="onPhotoSelected($event)" />
+            <button type="button" class="secondary-btn" (click)="pickPhoto()">Upload photo</button>
+            <p>Recommended: a clear face photo.</p>
+          </div>
+        </div>
+
+        <div class="name-row">
+          <label>
+            First name
+            <input formControlName="firstName" type="text" placeholder="Jane" />
+            <div class="field-error-slot">@if (showError('firstName')) { <small class="field-error">First name is required.</small> }</div>
+          </label>
+          <label>
+            Last name
+            <input formControlName="lastName" type="text" placeholder="Doe" />
+            <div class="field-error-slot">@if (showError('lastName')) { <small class="field-error">Last name is required.</small> }</div>
+          </label>
+        </div>
+
+        <div class="grid-row">
+          <label>
+            Date of birth
+            <input formControlName="birthDate" type="date" />
+            <div class="field-error-slot">@if (showError('birthDate')) { <small class="field-error">Date of birth is required.</small> }</div>
+          </label>
+          <label>
+            City
+            <input formControlName="city" type="text" placeholder="Cluj-Napoca" />
+            <div class="field-error-slot">@if (showError('city')) { <small class="field-error">City is required.</small> }</div>
+          </label>
+        </div>
+
+        <label>
+          Email
+          <input formControlName="email" type="email" placeholder="you@example.com" />
+          <div class="field-error-slot">@if (showError('email')) { <small class="field-error">Please enter a valid email address.</small> }</div>
+        </label>
+
+        <label>
+          Phone
+          <input formControlName="phone" type="tel" placeholder="+40..." />
+        </label>
+
+        <label>
+          About you
+          <textarea formControlName="bio" rows="4" placeholder="Tell us a bit about your goals and background"></textarea>
+        </label>
+
+        <div class="grid-row">
+          <label>
+            Password
+            <input formControlName="password" type="password" placeholder="Create a password" />
+            <div class="field-error-slot">@if (showError('password')) { <small class="field-error">Password must be at least 6 characters and include a number and a special character.</small> }</div>
+          </label>
+          <label>
+            Confirm password
+            <input formControlName="confirmPassword" type="password" placeholder="Repeat password" />
+            <div class="field-error-slot">
+              @if (showPasswordMismatch()) {
+                <small class="field-error">Passwords do not match.</small>
+              } @else if (showError('confirmPassword')) {
+                <small class="field-error">Please confirm your password.</small>
+              }
+            </div>
+          </label>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="primary-btn" [disabled]="form.invalid">Create account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -54,3 +54,8 @@ Thumbs.db
 
 # Git merge leftovers
 *.orig
+
+# Firebase config
+src/firebase.ts
+src/environments/environment.ts
+src/environments/environment.prod.ts
