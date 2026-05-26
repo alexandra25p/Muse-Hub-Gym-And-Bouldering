@@ -45,3 +45,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Angular full cache directory
+.angular/
+
+# npm pack artifacts
+*.tgz
+
+# Git merge leftovers
+*.orig
