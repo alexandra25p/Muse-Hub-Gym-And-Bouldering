@@ -102,38 +102,69 @@ export class SignUp {
 }
 
   async submit() {
-  if (this.form.invalid) return;
+    if (this.form.invalid || this.isLoading) return;
+    this.submitted = true;
+    this.isLoading = true;
+    this.errorMessage = '';
 
-  try {
-    const values = this.form.getRawValue() as SignupFormValues;
-    
-    const { confirmPassword, password, ...raw } = values;
+    try {
+      const values = this.form.getRawValue() as SignupFormValues;
+      
+      const { confirmPassword, password, ...raw } = values;
 
-    const userData = {
-      name: `${raw.firstName ?? ''} ${raw.lastName ?? ''}`.trim(),
-      firstName: raw.firstName ?? '',
-      lastName: raw.lastName ?? '',
-      email: raw.email ?? '',
-      birthDate: raw.birthDate ?? '',
-      city: raw.city ?? '',
-      phone: raw.phone ?? '',
-      bio: raw.bio ?? '',
-      photoUrl: this.photoPreview ?? '' 
-    };
+      const userData = {
+        name: `${raw.firstName ?? ''} ${raw.lastName ?? ''}`.trim(),
+        firstName: raw.firstName ?? '',
+        lastName: raw.lastName ?? '',
+        email: raw.email ?? '',
+        birthDate: raw.birthDate ?? '',
+        city: raw.city ?? '',
+        phone: raw.phone ?? '',
+        bio: raw.bio ?? '',
+        profilePhoto: this.photoPreview ?? '',
+        role: 'member',
+        onboardingDone: false
+      };
 
-    const user = await this.authService.signUp(
-      raw.email ?? '',
-      password ?? '',
-      userData as any 
-    );
+      const user = await this.authService.signUp(
+        raw.email ?? '',
+        password ?? '',
+        userData as any 
+      );
 
-    console.log('Utilizator creat cu succes!', user);
-  
+      console.log('Utilizator creat cu succes!', user);
 
-  } catch (error) {
-    console.error('Eroare la înregistrare:', error);
+      // Conectăm utilizatorul local în UserService
+      this.userService.setUser({
+        email: user.email,
+        name: user.firstName || 'User',
+        firstName: user.firstName,
+        lastName: user.lastName,
+        birthDate: user.birthDate,
+        city: user.city,
+        profilePhoto: user.profilePhoto,
+        phone: user.phone,
+        bio: user.bio,
+        role: 'member',
+        onboardingDone: false
+      }, true);
+
+      this.isLoading = false;
+      this.router.navigate(['/profile']);
+    } catch (error: any) {
+      this.isLoading = false;
+      console.error('Eroare la înregistrare:', error);
+      
+      // Afișăm mesaje specifice de eroare în UI
+      if (error.code === 'auth/email-already-in-use') {
+        this.errorMessage = 'Acest e-mail este deja utilizat de un alt cont.';
+      } else if (error.code === 'permission-denied' || error.message?.includes('permission')) {
+        this.errorMessage = 'Eroare de permisiune la scrierea în Firestore (users). Verificați regulile de securitate ale bazei de date în consola Firebase.';
+      } else {
+        this.errorMessage = error.message || 'Eroare la salvarea datelor în baza de date.';
+      }
+    }
   }
-}
 
   showError(controlName: string): boolean {
     const control = this.form.get(controlName);
