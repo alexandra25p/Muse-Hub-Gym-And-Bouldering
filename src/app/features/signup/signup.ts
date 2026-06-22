@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
+import { passwordValidator, passwordsMatchValidator } from '../../core/helpers/validators';
 
 interface SignupFormValues {
   firstName?: string;
@@ -17,16 +18,6 @@ interface SignupFormValues {
   confirmPassword?: string;
 }
 
-const passwordPattern = /^(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
-
-function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
-  const password = group.get('password')?.value;
-  const confirmPassword = group.get('confirmPassword')?.value;
-
-  if (!password || !confirmPassword) return null;
-  return password === confirmPassword ? null : { passwordsMismatch: true };
-}
-
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -35,7 +26,6 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
   styleUrl: './signup.scss',
 })
 export class SignUp {
-  private fb = inject(FormBuilder);
   private router = inject(Router);
   private userService = inject(UserService);
   private authService = inject(AuthService);
@@ -47,18 +37,18 @@ export class SignUp {
   isLoading = false;
   errorMessage = '';
 
-  form = this.fb.group(
+  form = new FormGroup(
     {
-      profilePhoto: [''],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      birthDate: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      bio: [''],
-      password: ['', [Validators.required, Validators.pattern(passwordPattern)]],
-      confirmPassword: ['', [Validators.required]],
+      profilePhoto: new FormControl(''),
+      firstName: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+      lastName: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+      birthDate: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+      city: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+      email: new FormControl('', { validators: [Validators.required, Validators.email], nonNullable: true }),
+      phone: new FormControl(''),
+      bio: new FormControl(''),
+      password: new FormControl('', { validators: [Validators.required, passwordValidator()], nonNullable: true }),
+      confirmPassword: new FormControl('', { validators: [Validators.required], nonNullable: true }),
     },
     { validators: passwordsMatchValidator }
   );
@@ -120,6 +110,7 @@ export class SignUp {
     const { confirmPassword, password, ...raw } = values;
 
     const userData = {
+      name: `${raw.firstName ?? ''} ${raw.lastName ?? ''}`.trim(),
       firstName: raw.firstName ?? '',
       lastName: raw.lastName ?? '',
       email: raw.email ?? '',

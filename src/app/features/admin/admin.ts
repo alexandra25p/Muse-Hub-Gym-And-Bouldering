@@ -7,9 +7,9 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { FormsModule } from '@angular/forms';
-import { AppNavbar } from '../../shared/app-navbar/app-navbar';
-import { UserService } from '../../services/user.service';
-import { ClassesService } from '../../services/classes.service';
+import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
+import { UserService } from '../../core/services/user.service';
+import { ClassesService } from '../../core/services/classes.service';
 
 interface MockMember {
   id: number;

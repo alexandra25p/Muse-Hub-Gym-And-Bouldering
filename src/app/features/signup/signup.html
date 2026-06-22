@@ -80,7 +80,7 @@
           <label>
             Password
             <input formControlName="password" type="password" placeholder="Create a password" />
-            <div class="field-error-slot">@if (showError('password')) { <small class="field-error">Password must be at least 6 characters and include a number and a special character.</small> }</div>
+            <div class="field-error-slot">@if (showError('password')) { <small class="field-error">Password must be at least 6 characters and include an uppercase letter, a lowercase letter, a number, and a special character.</small> }</div>
           </label>
           <label>
             Confirm password

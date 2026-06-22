@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { EyeInvisibleOutline, EyeOutline } from '@ant-design/icons-angular/icons';
 
-// Importăm serviciile necesare
+// Importăm serviciile necesare și helperul de validare
 import { LoginModalService } from '../../services/login-modal.service';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
+import { passwordValidator } from '../../helpers/validators';
 
 @Component({
   selector: 'app-login-modal',
@@ -19,7 +20,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login-modal.scss',
 })
 export class LoginModal {
-  private fb = inject(FormBuilder);
   private router = inject(Router);
   private modal = inject(LoginModalService);
   private userService = inject(UserService);
@@ -29,10 +29,10 @@ export class LoginModal {
   loginError = '';
   showPassword = false;
 
-  form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
-    rememberMe: [false],
+  form = new FormGroup({
+    email: new FormControl('', { validators: [Validators.required, Validators.email], nonNullable: true }),
+    password: new FormControl('', { validators: [Validators.required, passwordValidator()], nonNullable: true }),
+    rememberMe: new FormControl(false, { nonNullable: true }),
   });
 
   close(): void {
@@ -66,8 +66,16 @@ export class LoginModal {
       if (user) {
         this.userService.setUser({ 
           email: user.email, 
-          name: user.firstName || 'User', 
-          onboardingDone: true 
+          name: user.firstName || 'User',
+          firstName: user.firstName,
+          lastName: user.lastName,
+          city: user.city,
+          birthDate: user.birthDate,
+          phone: user.phone,
+          bio: user.bio,
+          profilePhoto: user.profilePhoto,
+          role: user.role || 'member',
+          onboardingDone: user.onboardingDone ?? false 
         }, !!rememberMe);
 
         this.modal.close();

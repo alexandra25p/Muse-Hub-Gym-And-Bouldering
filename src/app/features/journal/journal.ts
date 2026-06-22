@@ -1,11 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppNavbar } from '../../shared/app-navbar/app-navbar';
-import { AppChart } from '../../shared/chart/chart';
-import { UserService } from '../../services/user.service';
-import { JournalService, FitnessEntry, BoulderingEntry, JournalEntry } from '../../services/journal.service';
-import { WallService } from '../../services/wall.service';
+import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
+import { AppChart } from '../../core/shared/chart/chart';
+import { UserService } from '../../core/services/user.service';
+import { JournalService, FitnessEntry, BoulderingEntry, JournalEntry } from '../../core/services/journal.service';
+import { WallService } from '../../core/services/wall.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';

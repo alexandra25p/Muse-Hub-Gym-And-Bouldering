@@ -1,9 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppNavbar } from '../../shared/app-navbar/app-navbar';
-import { UserService } from '../../services/user.service';
-import { ClassesService, GymClass } from '../../services/classes.service';
+import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
+import { UserService } from '../../core/services/user.service';
+import { ClassesService, GymClass } from '../../core/services/classes.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';

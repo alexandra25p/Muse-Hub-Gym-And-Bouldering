@@ -8,10 +8,10 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { AppNavbar } from '../../shared/app-navbar/app-navbar';
-import { UserService } from '../../services/user.service';
-import { JournalService, BoulderingEntry, FitnessEntry } from '../../services/journal.service';
-import { WallService } from '../../services/wall.service';
+import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
+import { UserService } from '../../core/services/user.service';
+import { JournalService, BoulderingEntry, FitnessEntry } from '../../core/services/journal.service';
+import { WallService } from '../../core/services/wall.service';
 
 interface Badge {
   id: string;

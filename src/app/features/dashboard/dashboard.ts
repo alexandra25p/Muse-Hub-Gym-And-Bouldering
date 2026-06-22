@@ -7,11 +7,11 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { FormsModule } from '@angular/forms';
-import { AppNavbar } from '../../shared/app-navbar/app-navbar';
-import { UserService } from '../../services/user.service';
-import { ClassesService } from '../../services/classes.service';
-import { JournalService, BoulderingEntry } from '../../services/journal.service';
-import { WallService } from '../../services/wall.service';
+import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
+import { UserService } from '../../core/services/user.service';
+import { ClassesService } from '../../core/services/classes.service';
+import { JournalService, BoulderingEntry } from '../../core/services/journal.service';
+import { WallService } from '../../core/services/wall.service';
 
 @Component({
   selector: 'app-dashboard',
