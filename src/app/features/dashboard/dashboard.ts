@@ -29,9 +29,14 @@ export class Dashboard {
   user = this.userService.user;
   isAdmin = computed(() => this.user()?.email === 'admin@muse.com');
 
+  totalMembersCount = signal(11);
+  activeMembersCount = signal(9);
+  totalClassesCount = computed(() => this.classesService.classes().length);
+  totalRoutesCount = computed(() => this.wallService.routes().length);
+
   showOnboarding = computed(() => {
     const u = this.user();
-    return u !== null && u.onboardingDone === false;
+    return u !== null && u.onboardingDone === false && !this.isAdmin();
   });
 
   onboardingStep = signal(1);

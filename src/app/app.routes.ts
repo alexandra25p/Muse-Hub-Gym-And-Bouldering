@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
+import { adminGuard, authGuard, memberGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./features/home/home').then(m => m.Home) },
@@ -13,7 +13,7 @@ export const routes: Routes = [
   {
     path: 'journal',
     loadComponent: () => import('./features/journal/journal').then(m => m.Journal),
-    canActivate: [authGuard],
+    canActivate: [authGuard, memberGuard],
   },
   {
     path: 'classes',
@@ -23,7 +23,7 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./features/profile/profile').then(m => m.Profile),
-    canActivate: [authGuard],
+    canActivate: [authGuard, memberGuard],
   },
   {
     path: 'wall',
@@ -33,12 +33,12 @@ export const routes: Routes = [
   {
     path: 'leaderboard',
     loadComponent: () => import('./features/leaderboard/leaderboard').then(m => m.Leaderboard),
-    canActivate: [authGuard],
+    canActivate: [authGuard, memberGuard],
   },
   {
     path: 'admin',
     loadComponent: () => import('./features/admin/admin').then(m => m.Admin),
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
   },
   { path: '**', redirectTo: '' },
 ];
