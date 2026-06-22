@@ -123,6 +123,7 @@ export class SignUp {
         bio: raw.bio ?? '',
         profilePhoto: this.photoPreview ?? '',
         role: 'member',
+        status: 'active',
         onboardingDone: false
       };
 
@@ -146,6 +147,7 @@ export class SignUp {
         phone: user.phone,
         bio: user.bio,
         role: 'member',
+        status: 'active',
         onboardingDone: false
       }, true);
 

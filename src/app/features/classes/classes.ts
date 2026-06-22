@@ -46,7 +46,7 @@ export class Classes {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   searchQuery = signal('');

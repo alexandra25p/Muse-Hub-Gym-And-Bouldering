@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -12,6 +12,8 @@ import { UserService } from '../../core/services/user.service';
 import { ClassesService } from '../../core/services/classes.service';
 import { JournalService, BoulderingEntry } from '../../core/services/journal.service';
 import { WallService } from '../../core/services/wall.service';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +21,7 @@ import { WallService } from '../../core/services/wall.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   private userService = inject(UserService);
   private classesService = inject(ClassesService);
   private journalService = inject(JournalService);
@@ -29,8 +31,8 @@ export class Dashboard {
   user = this.userService.user;
   isAdmin = computed(() => this.user()?.email === 'admin@muse.com');
 
-  totalMembersCount = signal(11);
-  activeMembersCount = signal(9);
+  totalMembersCount = signal(0);
+  activeMembersCount = signal(0);
   totalClassesCount = computed(() => this.classesService.classes().length);
   totalRoutesCount = computed(() => this.wallService.routes().length);
 
@@ -38,6 +40,34 @@ export class Dashboard {
     const u = this.user();
     return u !== null && u.onboardingDone === false && !this.isAdmin();
   });
+
+  async ngOnInit() {
+    await this.userService.syncUserWithFirestore();
+    if (this.isAdmin()) {
+      await this.loadAdminStats();
+    }
+  }
+
+  async loadAdminStats() {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'users'));
+      let total = 0;
+      let active = 0;
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data['role'] !== 'admin') {
+          total++;
+          if (data['status'] !== 'inactive') {
+            active++;
+          }
+        }
+      });
+      this.totalMembersCount.set(total);
+      this.activeMembersCount.set(active);
+    } catch (error) {
+      console.error('Error loading admin stats from Firestore:', error);
+    }
+  }
 
   onboardingStep = signal(1);
   selectedGoal = signal('');
@@ -98,6 +128,6 @@ export class Dashboard {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

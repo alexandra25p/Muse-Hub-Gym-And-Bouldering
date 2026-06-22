@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -10,9 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { AppNavbar } from '../../core/shared/app-navbar/app-navbar';
 import { UserService } from '../../core/services/user.service';
 import { ClassesService } from '../../core/services/classes.service';
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 interface MockMember {
-  id: number;
+  id: string; // ID unic (UID-ul Firebase)
   name: string;
   email: string;
   role: 'admin' | 'member';
@@ -21,38 +23,62 @@ interface MockMember {
   initials: string;
 }
 
-const MOCK_MEMBERS: MockMember[] = [
-  { id: 1, name: 'Admin',           email: 'admin@muse.com',              role: 'admin',  status: 'active',   joinDate: '2024-01-01', initials: 'AD' },
-  { id: 2, name: 'Ioana Constantin',email: 'ioana.c@example.com',         role: 'member', status: 'active',   joinDate: '2024-02-10', initials: 'IC' },
-  { id: 3, name: 'Radu Stan',       email: 'radu.stan@example.com',       role: 'member', status: 'active',   joinDate: '2024-02-18', initials: 'RS' },
-  { id: 4, name: 'Sorina Tudor',    email: 'sorina.tudor@example.com',    role: 'member', status: 'active',   joinDate: '2024-03-05', initials: 'ST' },
-  { id: 5, name: 'Ana Ionescu',     email: 'ana.ionescu@example.com',     role: 'member', status: 'active',   joinDate: '2024-03-12', initials: 'AI' },
-  { id: 6, name: 'Maria Popa',      email: 'maria.popa@example.com',      role: 'member', status: 'active',   joinDate: '2024-03-20', initials: 'MP' },
-  { id: 7, name: 'Elena Marin',     email: 'elena.marin@example.com',     role: 'member', status: 'active',   joinDate: '2024-04-02', initials: 'EM' },
-  { id: 8, name: 'Bogdan Nica',     email: 'bogdan.nica@example.com',     role: 'member', status: 'active',   joinDate: '2024-04-14', initials: 'BN' },
-  { id: 9, name: 'Mihai Pop',       email: 'mihai.pop@example.com',       role: 'member', status: 'inactive', joinDate: '2024-04-22', initials: 'MP' },
-  { id: 10, name: 'Andrei Gheorghe',email: 'andrei.g@example.com',        role: 'member', status: 'active',   joinDate: '2024-05-01', initials: 'AG' },
-  { id: 11, name: 'Cristian Dima',  email: 'cristian.dima@example.com',   role: 'member', status: 'inactive', joinDate: '2024-05-08', initials: 'CD' },
-];
-
 @Component({
   selector: 'app-admin',
   imports: [AppNavbar, NzTableModule, NzButtonModule, NzTagModule, NzIconModule, NzAvatarModule, NzSwitchModule, FormsModule],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
-export class Admin {
+export class Admin implements OnInit {
   private userService = inject(UserService);
   private classesService = inject(ClassesService);
   private router = inject(Router);
 
   user = this.userService.user;
-  members = signal([...MOCK_MEMBERS]);
+  members = signal<MockMember[]>([]);
   classes = this.classesService.classes;
   expandedClass = signal<number | null>(null);
+  loadingError = signal('');
 
   activeCount = computed(() => this.members().filter(m => m.status === 'active').length);
   memberCount  = computed(() => this.members().filter(m => m.role === 'member').length);
+
+  async ngOnInit() {
+    await this.loadMembers();
+  }
+
+  async loadMembers() {
+    this.loadingError.set('');
+    try {
+      const querySnapshot = await getDocs(collection(db, 'users'));
+      const list: MockMember[] = [];
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const firstName = data['firstName'] || '';
+        const lastName = data['lastName'] || '';
+        const fullName = data['name'] || `${firstName} ${lastName}`.trim() || 'User';
+        const initials = ((firstName?.[0] || '') + (lastName?.[0] || '')).toUpperCase() || fullName.substring(0, 2).toUpperCase() || 'U';
+
+        list.push({
+          id: docSnap.id,
+          name: fullName,
+          email: data['email'] || '',
+          role: data['role'] || 'member',
+          status: data['status'] || 'active',
+          joinDate: data['createdAt'] ? new Date(data['createdAt']).toLocaleDateString('ro-RO') : 'N/A',
+          initials: initials
+        });
+      });
+      this.members.set(list);
+    } catch (error: any) {
+      console.error('Error loading members from Firestore:', error);
+      if (error.code === 'permission-denied' || error.message?.includes('permission')) {
+        this.loadingError.set('Eroare de permisiune (Permission Denied). Asigurați-vă că ați adăugat permisiunile de citire în regulile Firestore din Consola Firebase (vezi documentația de mai sus).');
+      } else {
+        this.loadingError.set('Eroare la încărcarea membrilor: ' + (error.message || error));
+      }
+    }
+  }
 
   isAttended(classId: number, email: string): boolean {
     return this.classesService.isAttended(classId, email);
@@ -66,18 +92,26 @@ export class Admin {
     this.expandedClass.update(cur => (cur === classId ? null : classId));
   }
 
-  toggleStatus(memberId: number): void {
-    this.members.update(list =>
-      list.map(m =>
-        m.id === memberId
-          ? { ...m, status: m.status === 'active' ? 'inactive' : 'active' as 'active' | 'inactive' }
-          : m
-      )
-    );
+  async toggleStatus(memberId: string): Promise<void> {
+    const member = this.members().find(m => m.id === memberId);
+    if (!member) return;
+    const newStatus = member.status === 'active' ? 'inactive' : 'active';
+
+    try {
+      const userDocRef = doc(db, 'users', memberId);
+      await updateDoc(userDocRef, { status: newStatus });
+
+      this.members.update(list =>
+        list.map(m => m.id === memberId ? { ...m, status: newStatus } : m)
+      );
+      console.log(`Statusul membrului ${member.email} a fost salvat ca ${newStatus} în Firestore.`);
+    } catch (error) {
+      console.error('Eroare la actualizarea statusului în Firestore:', error);
+    }
   }
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

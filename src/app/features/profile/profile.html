@@ -7,7 +7,11 @@
       <div class="user-info">
         <h2 class="user-name">{{ user()?.name ?? '—' }}</h2>
         <span class="user-email">{{ user()?.email ?? '' }}</span>
-        <nz-tag nzColor="purple" class="member-tag">Active Member</nz-tag>
+        @if (user()?.status === 'inactive') {
+          <nz-tag nzColor="red" class="member-tag">Inactive Member</nz-tag>
+        } @else {
+          <nz-tag nzColor="purple" class="member-tag">Active Member</nz-tag>
+        }
       </div>
     </div>
 
@@ -26,7 +30,7 @@
         </div>
         <div class="info-row">
           <span class="info-label">Membership</span>
-          <span class="info-value">Active · Monthly</span>
+          <span class="info-value">{{ user()?.status === 'inactive' ? 'Inactive' : 'Active · Monthly' }}</span>
         </div>
         @if (user()?.fitnessGoal) {
           <div class="info-row">

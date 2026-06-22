@@ -25,6 +25,13 @@
     </div>
   </div>
 
+  @if (loadingError()) {
+    <div style="background-color: #fff2f0; border: 1px solid #ffccc7; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #ff4d4f; display: flex; align-items: center; gap: 8px;">
+      <span nz-icon nzType="warning" nzTheme="outline"></span>
+      <span>{{ loadingError() }}</span>
+    </div>
+  }
+
   <!-- Member Management -->
   <section class="admin-section">
     <h2 class="admin-section-title">

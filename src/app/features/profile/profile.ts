@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -37,7 +37,7 @@ interface Badge {
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
+export class Profile implements OnInit {
   private userService = inject(UserService);
   private journalService = inject(JournalService);
   private wallService = inject(WallService);
@@ -52,6 +52,11 @@ export class Profile {
     this.form = this.fb.group({
       name: [this.user()?.name ?? '', Validators.required],
     });
+  }
+
+  async ngOnInit() {
+    await this.userService.syncUserWithFirestore();
+    this.form.patchValue({ name: this.user()?.name ?? '' });
   }
 
   get initials(): string {
@@ -94,6 +99,6 @@ export class Profile {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

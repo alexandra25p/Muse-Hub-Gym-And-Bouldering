@@ -75,7 +75,8 @@ export class LoginModal {
           bio: user.bio,
           profilePhoto: user.profilePhoto,
           role: user.role || 'member',
-          onboardingDone: user.onboardingDone ?? false 
+          status: user.status || 'active',
+          onboardingDone: true 
         }, !!rememberMe);
 
         this.modal.close();

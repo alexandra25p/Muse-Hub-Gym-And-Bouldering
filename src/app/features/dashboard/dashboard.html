@@ -87,7 +87,7 @@
     <div class="stats-grid">
       <div class="stat-card stat-purple">
         <span nz-icon nzType="trophy" nzTheme="outline" class="stat-icon"></span>
-        <span class="stat-num">Active</span>
+        <span class="stat-num">{{ user()?.status === 'inactive' ? 'Inactive' : 'Active' }}</span>
         <span class="stat-label">Membership</span>
       </div>
       <div class="stat-card stat-blue">

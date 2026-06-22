@@ -74,6 +74,6 @@ export class Leaderboard {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

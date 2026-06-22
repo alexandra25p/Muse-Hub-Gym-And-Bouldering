@@ -45,7 +45,7 @@ export class Journal {
 
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   entries = this.journalService.entries;
