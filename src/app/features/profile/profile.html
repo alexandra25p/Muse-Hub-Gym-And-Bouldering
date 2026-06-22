@@ -3,7 +3,7 @@
 <div class="profile-page">
   <div class="profile-card">
     <div class="avatar-section">
-      <nz-avatar [nzText]="initials" nzSize="large" class="avatar"></nz-avatar>
+      <nz-avatar [nzSrc]="user()?.profilePhoto || ''" [nzText]="initials" nzSize="large" class="avatar"></nz-avatar>
       <div class="user-info">
         <h2 class="user-name">{{ user()?.name ?? '—' }}</h2>
         <span class="user-email">{{ user()?.email ?? '' }}</span>
