@@ -83,18 +83,20 @@
 
           <div class="route-footer">
             <span class="send-count">{{ route.completedBy.length }} send{{ route.completedBy.length !== 1 ? 's' : '' }}</span>
-            <button
-              nz-button
-              [nzType]="isCompleted(route.id) ? 'default' : 'primary'"
-              nzSize="small"
-              (click)="toggleComplete(route.id)"
-            >
-              @if (isCompleted(route.id)) {
-                <span nz-icon nzType="check"></span> Sent!
-              } @else {
-                Mark Sent
-              }
-            </button>
+            @if (!isAdmin()) {
+              <button
+                nz-button
+                [nzType]="isCompleted(route.id) ? 'default' : 'primary'"
+                nzSize="small"
+                (click)="toggleComplete(route.id)"
+              >
+                @if (isCompleted(route.id)) {
+                  <span nz-icon nzType="check"></span> Sent!
+                } @else {
+                  Mark Sent
+                }
+              </button>
+            }
           </div>
         </div>
       }

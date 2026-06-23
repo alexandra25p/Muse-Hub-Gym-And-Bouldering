@@ -68,14 +68,14 @@ export class Wall {
     return this.routes().filter(r => r.completedBy.includes(email)).length;
   });
 
-  isCompleted(routeId: number): boolean {
+  isCompleted(routeId: string): boolean {
     const email = this.user()?.email;
     return email
       ? (this.wallService.routes().find(r => r.id === routeId)?.completedBy.includes(email) ?? false)
       : false;
   }
 
-  toggleComplete(routeId: number): void {
+  toggleComplete(routeId: string): void {
     const email = this.user()?.email;
     if (email) this.wallService.toggleComplete(routeId, email);
   }
@@ -113,7 +113,7 @@ export class Wall {
   }
 
   modalVisible = false;
-  editingId: number | null = null;
+  editingId: string | null = null;
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -158,7 +158,7 @@ export class Wall {
     this.modalVisible = false;
   }
 
-  delete(id: number): void {
+  delete(id: string): void {
     this.wallService.deleteRoute(id);
   }
 }

@@ -1,7 +1,9 @@
 import { Injectable, signal } from '@angular/core';
+import { collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 export interface WallRoute {
-  id: number;
+  id: string; 
   name: string;
   grade: string;
   setter: string;
@@ -10,7 +12,7 @@ export interface WallRoute {
   completedBy: string[];
 }
 
-const SEED: WallRoute[] = [
+const SEED = [
   { id: 1, name: 'Purple Rain', grade: 'V2', setter: 'Radu Stan', dateSet: '2026-04-01', color: 'purple', completedBy: [] },
   { id: 2, name: 'Blue Horizon', grade: 'V4', setter: 'Radu Stan', dateSet: '2026-04-01', color: 'blue', completedBy: [] },
   { id: 3, name: 'Crimson Tide', grade: 'V1', setter: 'Mihai Pop', dateSet: '2026-04-15', color: 'red', completedBy: [] },
@@ -25,52 +27,96 @@ const SEED: WallRoute[] = [
 
 @Injectable({ providedIn: 'root' })
 export class WallService {
-  private nextId = signal(11);
-  routes = signal<WallRoute[]>(this.load());
+  routes = signal<WallRoute[]>([]);
 
-  private load(): WallRoute[] {
-    try {
-      const raw = localStorage.getItem('museHubWall');
-      return raw ? (JSON.parse(raw) as WallRoute[]) : SEED;
-    } catch {
-      return SEED;
+  constructor() {
+    onSnapshot(
+      collection(db, 'routes'),
+      (snapshot) => {
+        const list: WallRoute[] = [];
+        snapshot.forEach(docSnap => {
+          list.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          } as WallRoute);
+        });
+
+        if (list.length === 0) {
+          this.seedInitialRoutes();
+        } else {
+          list.sort((a, b) => a.id.localeCompare(b.id));
+          this.routes.set(list);
+        }
+      },
+      (error) => {
+        console.error('❌ Firestore onSnapshot error (routes):', error.code, error.message);
+      }
+    );
+  }
+
+  private async seedInitialRoutes(): Promise<void> {
+    console.log('Seeding initial bouldering routes to Firestore...');
+    for (const r of SEED) {
+      const { id, ...data } = r;
+      const docRef = doc(db, 'routes', `route_${id}`);
+      await setDoc(docRef, {
+        ...data,
+        id: `route_${id}`
+      });
     }
   }
 
-  private persist(): void {
-    localStorage.setItem('museHubWall', JSON.stringify(this.routes()));
+  async toggleComplete(routeId: string, email: string): Promise<void> {
+    const route = this.routes().find(r => r.id === routeId);
+    if (!route) return;
+
+    const done = route.completedBy.includes(email);
+    const newCompletedBy = done
+      ? route.completedBy.filter(e => e !== email)
+      : [...route.completedBy, email];
+
+    try {
+      const docRef = doc(db, 'routes', routeId);
+      await updateDoc(docRef, { completedBy: newCompletedBy });
+    } catch (err) {
+      console.error('Error toggling route completion in Firestore:', err);
+    }
   }
 
-  toggleComplete(routeId: number, email: string): void {
-    this.routes.update(list =>
-      list.map(r => {
-        if (r.id !== routeId) return r;
-        const done = r.completedBy.includes(email);
-        return {
-          ...r,
-          completedBy: done ? r.completedBy.filter(e => e !== email) : [...r.completedBy, email],
-        };
-      })
-    );
-    this.persist();
+  async addRoute(data: Omit<WallRoute, 'id' | 'completedBy'>): Promise<void> {
+    try {
+      const routesCollection = collection(db, 'routes');
+      const docRef = await addDoc(routesCollection, {
+        ...data,
+        completedBy: []
+      });
+      await updateDoc(docRef, { id: docRef.id });
+    } catch (err) {
+      console.error('Error adding route to Firestore:', err);
+    }
   }
 
-  addRoute(data: Omit<WallRoute, 'id' | 'completedBy'>): void {
-    const id = this.nextId();
-    this.routes.update(list => [...list, { id, completedBy: [], ...data }]);
-    this.nextId.update(n => n + 1);
-    this.persist();
+  async updateRoute(id: string, data: Omit<WallRoute, 'id' | 'completedBy'>): Promise<void> {
+    try {
+      const docRef = doc(db, 'routes', id);
+      await updateDoc(docRef, {
+        name: data.name,
+        grade: data.grade,
+        setter: data.setter,
+        dateSet: data.dateSet,
+        color: data.color
+      });
+    } catch (err) {
+      console.error('Error updating route in Firestore:', err);
+    }
   }
 
-  updateRoute(id: number, data: Omit<WallRoute, 'id' | 'completedBy'>): void {
-    this.routes.update(list =>
-      list.map(r => (r.id === id ? { id, completedBy: r.completedBy, ...data } : r))
-    );
-    this.persist();
-  }
-
-  deleteRoute(id: number): void {
-    this.routes.update(list => list.filter(r => r.id !== id));
-    this.persist();
+  async deleteRoute(id: string): Promise<void> {
+    try {
+      const docRef = doc(db, 'routes', id);
+      await deleteDoc(docRef);
+    } catch (err) {
+      console.error('Error deleting route from Firestore:', err);
+    }
   }
 }
