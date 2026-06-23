@@ -164,21 +164,19 @@ export class Journal {
 
       const v = this.fitnessForm.value;
       this.journalService.addEntry({
-        id: Date.now(),
         type: 'fitness',
         date,
         muscleGroups: [...this.selectedMuscles],
         equipment: v.equipment,
         reps: v.reps,
         kcal: v.kcal,
-      } as FitnessEntry);
+      } as Omit<FitnessEntry, 'id'>);
     } else {
       Object.values(this.boulderingForm.controls).forEach(c => c.markAsDirty());
       if (this.boulderingForm.invalid) return;
 
       const v = this.boulderingForm.value;
       this.journalService.addEntry({
-        id: Date.now(),
         type: 'bouldering',
         date,
         routesFinished: v.routesFinished,
@@ -186,7 +184,7 @@ export class Journal {
         difficulty: v.difficulty,
         durationMinutes: v.durationMinutes,
         kcal: v.kcal,
-      } as BoulderingEntry);
+      } as Omit<BoulderingEntry, 'id'>);
     }
 
     this.modalVisible = false;

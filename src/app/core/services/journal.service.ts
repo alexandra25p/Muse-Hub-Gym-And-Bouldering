@@ -1,8 +1,10 @@
 import { Injectable, signal, effect, inject } from '@angular/core';
 import { UserService } from './user.service';
+import { collection, query, where, onSnapshot, addDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 export interface FitnessEntry {
-  id: number;
+  id: string; // ID-ul unic din Firestore
   type: 'fitness';
   date: string;
   muscleGroups: string[];
@@ -12,7 +14,7 @@ export interface FitnessEntry {
 }
 
 export interface BoulderingEntry {
-  id: number;
+  id: string; // ID-ul unic din Firestore
   type: 'bouldering';
   date: string;
   routesFinished: number;
@@ -28,48 +30,71 @@ export type JournalEntry = FitnessEntry | BoulderingEntry;
 export class JournalService {
   private userService = inject(UserService);
   entries = signal<JournalEntry[]>([]);
+  private unsubscribe: (() => void) | null = null;
 
   constructor() {
-    // Reîncărcăm automat intrările din jurnal specifice utilizatorului curent
-    effect(() => {
+    // Sincronizăm automat intrările în funcție de sesiunea utilizatorului curent
+    effect((onCleanup) => {
       const user = this.userService.user();
+
+      // Ne dezabonăm de la ascultătorul anterior dacă sesiunea s-a schimbat
+      if (this.unsubscribe) {
+        this.unsubscribe();
+        this.unsubscribe = null;
+      }
+
       if (user) {
-        this.entries.set(this.load(user.email));
+        // Interogare în Firestore filtrată după emailul utilizatorului logat
+        const q = query(
+          collection(db, 'workouts'),
+          where('userEmail', '==', user.email)
+        );
+
+        this.unsubscribe = onSnapshot(
+          q,
+          (snapshot) => {
+            const list: JournalEntry[] = [];
+            snapshot.forEach(docSnap => {
+              list.push({
+                id: docSnap.id,
+                ...docSnap.data()
+              } as JournalEntry);
+            });
+
+            // Sortăm descrescător după dată (cele mai recente primele)
+            list.sort((a, b) => b.date.localeCompare(a.date));
+            this.entries.set(list);
+          },
+          (error) => {
+            console.error('❌ Firestore onSnapshot error (workouts):', error.code, error.message);
+          }
+        );
       } else {
         this.entries.set([]);
       }
+
+      // Curățare la distrugerea efectului / schimbarea sesiunii
+      onCleanup(() => {
+        if (this.unsubscribe) {
+          this.unsubscribe();
+          this.unsubscribe = null;
+        }
+      });
     });
   }
 
-  private load(email: string): JournalEntry[] {
-    try {
-      const rawScoped = localStorage.getItem('museHubJournal_' + email);
-      if (rawScoped) {
-        return JSON.parse(rawScoped) as JournalEntry[];
-      }
-      
-      // Migrare unică pentru datele globale vechi (dacă există)
-      const rawGlobal = localStorage.getItem('museHubJournal');
-      if (rawGlobal) {
-        localStorage.setItem('museHubJournal_' + email, rawGlobal);
-        return JSON.parse(rawGlobal) as JournalEntry[];
-      }
-      
-      return [];
-    } catch {
-      return [];
-    }
-  }
-
-  private persist(email: string): void {
-    localStorage.setItem('museHubJournal_' + email, JSON.stringify(this.entries()));
-  }
-
-  addEntry(entry: JournalEntry): void {
+  async addEntry(entry: Omit<JournalEntry, 'id'>): Promise<void> {
     const email = this.userService.user()?.email;
     if (!email) return;
-    
-    this.entries.update(list => [entry, ...list]);
-    this.persist(email);
+
+    try {
+      const workoutsCollection = collection(db, 'workouts');
+      await addDoc(workoutsCollection, {
+        ...entry,
+        userEmail: email
+      });
+    } catch (err) {
+      console.error('Error adding workout entry to Firestore:', err);
+    }
   }
 }
