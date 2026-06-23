@@ -79,7 +79,7 @@ export class Classes {
   });
 
   modalVisible = false;
-  editingId: number | null = null;
+  editingId: string | null = null;
   form: FormGroup;
 
   typeOptions = ['Yoga', 'HIIT', 'Bouldering', 'Strength', 'Cardio', 'Pilates', 'Stretching'];
@@ -139,21 +139,21 @@ export class Classes {
     this.modalVisible = false;
   }
 
-  delete(id: number): void {
+  delete(id: string): void {
     this.classesService.deleteClass(id);
   }
 
-  toggleBooking(classId: number): void {
+  toggleBooking(classId: string): void {
     const email = this.user()?.email;
     if (email) this.classesService.toggleBooking(classId, email);
   }
 
-  isBooked(classId: number): boolean {
+  isBooked(classId: string): boolean {
     const email = this.user()?.email;
     return email ? this.classesService.isBooked(classId, email) : false;
   }
 
-  isFull(classId: number): boolean {
+  isFull(classId: string): boolean {
     return this.classesService.isFull(classId);
   }
 

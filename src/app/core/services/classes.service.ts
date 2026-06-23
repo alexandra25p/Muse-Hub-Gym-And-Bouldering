@@ -1,7 +1,9 @@
 import { Injectable, signal } from '@angular/core';
+import { collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 export interface GymClass {
-  id: number;
+  id: string; // ID unic stocat ca string (ID-ul documentului din Firestore)
   name: string;
   type: string;
   instructor: string;
@@ -12,7 +14,7 @@ export interface GymClass {
   attended: string[];
 }
 
-const SEED: GymClass[] = [
+const SEED = [
   { id: 1, name: 'Morning Yoga', type: 'Yoga', instructor: 'Ana Ionescu', day: 'Monday', time: '08:00', capacity: 15, enrolled: [], attended: [] },
   { id: 2, name: 'HIIT Blast', type: 'HIIT', instructor: 'Mihai Pop', day: 'Tuesday', time: '18:00', capacity: 20, enrolled: [], attended: [] },
   { id: 3, name: 'Boulder Basics', type: 'Bouldering', instructor: 'Radu Stan', day: 'Wednesday', time: '17:00', capacity: 12, enrolled: [], attended: [] },
@@ -22,61 +24,133 @@ const SEED: GymClass[] = [
 
 @Injectable({ providedIn: 'root' })
 export class ClassesService {
-  private nextId = signal(6);
-  classes = signal<GymClass[]>(SEED);
+  classes = signal<GymClass[]>([]);
 
-  toggleBooking(classId: number, email: string): void {
-    this.classes.update(list =>
-      list.map(c => {
-        if (c.id !== classId) return c;
-        const booked = c.enrolled.includes(email);
-        if (!booked && c.enrolled.length >= c.capacity) return c;
-        return {
-          ...c,
-          enrolled: booked ? c.enrolled.filter(e => e !== email) : [...c.enrolled, email],
-        };
-      })
+  constructor() {
+    // Ascultăm în timp real colecția "classes" din Firestore
+    onSnapshot(
+      collection(db, 'classes'), 
+      (snapshot) => {
+        const list: GymClass[] = [];
+        snapshot.forEach(docSnap => {
+          list.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          } as GymClass);
+        });
+
+        // Dacă Firestore este gol la prima inițializare, populăm cu datele inițiale
+        if (list.length === 0) {
+          this.seedInitialClasses();
+        } else {
+          // Sortăm clasele după zi/oră sau după id pentru consistență vizuală
+          list.sort((a, b) => a.id.localeCompare(b.id));
+          this.classes.set(list);
+        }
+      },
+      (error) => {
+        console.error('❌ Firestore onSnapshot error (classes):', error.code, error.message);
+      }
     );
   }
 
-  isBooked(classId: number, email: string): boolean {
+  private async seedInitialClasses(): Promise<void> {
+    console.log('Seeding initial classes to Firestore...');
+    for (const c of SEED) {
+      const { id, ...data } = c;
+      const docRef = doc(db, 'classes', `class_${id}`);
+      await setDoc(docRef, {
+        ...data,
+        id: `class_${id}`
+      });
+    }
+  }
+
+  async toggleBooking(classId: string, email: string): Promise<void> {
+    const cls = this.classes().find(c => c.id === classId);
+    if (!cls) return;
+
+    const booked = cls.enrolled.includes(email);
+    if (!booked && cls.enrolled.length >= cls.capacity) return;
+
+    const newEnrolled = booked
+      ? cls.enrolled.filter(e => e !== email)
+      : [...cls.enrolled, email];
+
+    try {
+      const docRef = doc(db, 'classes', classId);
+      await updateDoc(docRef, { enrolled: newEnrolled });
+    } catch (err) {
+      console.error('Error toggling booking in Firestore:', err);
+    }
+  }
+
+  isBooked(classId: string, email: string): boolean {
     return this.classes().find(c => c.id === classId)?.enrolled.includes(email) ?? false;
   }
 
-  isFull(classId: number): boolean {
+  isFull(classId: string): boolean {
     const cls = this.classes().find(c => c.id === classId);
     return cls ? cls.enrolled.length >= cls.capacity : false;
   }
 
-  markAttendance(classId: number, email: string, present: boolean): void {
-    this.classes.update(list =>
-      list.map(c => {
-        if (c.id !== classId) return c;
-        const attended = present
-          ? [...new Set([...c.attended, email])]
-          : c.attended.filter(e => e !== email);
-        return { ...c, attended };
-      })
-    );
+  async markAttendance(classId: string, email: string, present: boolean): Promise<void> {
+    const cls = this.classes().find(c => c.id === classId);
+    if (!cls) return;
+
+    const newAttended = present
+      ? [...new Set([...cls.attended, email])]
+      : cls.attended.filter(e => e !== email);
+
+    try {
+      const docRef = doc(db, 'classes', classId);
+      await updateDoc(docRef, { attended: newAttended });
+    } catch (err) {
+      console.error('Error marking attendance in Firestore:', err);
+    }
   }
 
-  isAttended(classId: number, email: string): boolean {
+  isAttended(classId: string, email: string): boolean {
     return this.classes().find(c => c.id === classId)?.attended.includes(email) ?? false;
   }
 
-  addClass(data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): void {
-    const id = this.nextId();
-    this.classes.update(list => [...list, { id, enrolled: [], attended: [], ...data }]);
-    this.nextId.update(n => n + 1);
+  async addClass(data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): Promise<void> {
+    try {
+      const classesCollection = collection(db, 'classes');
+      const docRef = await addDoc(classesCollection, {
+        ...data,
+        enrolled: [],
+        attended: []
+      });
+      // Salvăm și ID-ul documentului în interiorul câmpului "id" pentru consistență
+      await updateDoc(docRef, { id: docRef.id });
+    } catch (err) {
+      console.error('Error adding class to Firestore:', err);
+    }
   }
 
-  updateClass(id: number, data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): void {
-    this.classes.update(list =>
-      list.map(c => (c.id === id ? { id, enrolled: c.enrolled, attended: c.attended, ...data } : c))
-    );
+  async updateClass(id: string, data: Omit<GymClass, 'id' | 'enrolled' | 'attended'>): Promise<void> {
+    try {
+      const docRef = doc(db, 'classes', id);
+      await updateDoc(docRef, {
+        name: data.name,
+        type: data.type,
+        instructor: data.instructor,
+        day: data.day,
+        time: data.time,
+        capacity: data.capacity
+      });
+    } catch (err) {
+      console.error('Error updating class in Firestore:', err);
+    }
   }
 
-  deleteClass(id: number): void {
-    this.classes.update(list => list.filter(c => c.id !== id));
+  async deleteClass(id: string): Promise<void> {
+    try {
+      const docRef = doc(db, 'classes', id);
+      await deleteDoc(docRef);
+    } catch (err) {
+      console.error('Error deleting class from Firestore:', err);
+    }
   }
 }

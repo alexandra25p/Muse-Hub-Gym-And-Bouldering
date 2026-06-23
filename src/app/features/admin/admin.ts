@@ -14,7 +14,7 @@ import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 
 interface MockMember {
-  id: string; // ID unic (UID-ul Firebase)
+  id: string; 
   name: string;
   email: string;
   role: 'admin' | 'member';
@@ -37,7 +37,7 @@ export class Admin implements OnInit {
   user = this.userService.user;
   members = signal<MockMember[]>([]);
   classes = this.classesService.classes;
-  expandedClass = signal<number | null>(null);
+  expandedClass = signal<string | null>(null);
   loadingError = signal('');
 
   activeCount = computed(() => this.members().filter(m => m.status === 'active').length);
@@ -80,15 +80,15 @@ export class Admin implements OnInit {
     }
   }
 
-  isAttended(classId: number, email: string): boolean {
+  isAttended(classId: string, email: string): boolean {
     return this.classesService.isAttended(classId, email);
   }
 
-  toggleAttendance(classId: number, email: string, present: boolean): void {
+  toggleAttendance(classId: string, email: string, present: boolean): void {
     this.classesService.markAttendance(classId, email, present);
   }
 
-  toggleExpand(classId: number): void {
+  toggleExpand(classId: string): void {
     this.expandedClass.update(cur => (cur === classId ? null : classId));
   }
 
