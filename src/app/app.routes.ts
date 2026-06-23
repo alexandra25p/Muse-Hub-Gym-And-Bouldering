@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
-import { adminGuard, authGuard, memberGuard } from './core/guards/auth.guard';
+import { adminGuard, authGuard, memberGuard, unauthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./features/home/home').then(m => m.Home) },
-  { path: 'signup', loadComponent: () => import('./features/signup/signup').then(m => m.SignUp) },
+  { 
+    path: 'signup', 
+    loadComponent: () => import('./features/signup/signup').then(m => m.SignUp),
+    canActivate: [unauthGuard] 
+  },
   { path: 'login', redirectTo: 'signup', pathMatch: 'full' },
   {
     path: 'dashboard',

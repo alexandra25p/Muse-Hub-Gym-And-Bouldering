@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { passwordValidator, passwordsMatchValidator } from '../../core/helpers/validators';
+import { LoginModalService } from '../../core/services/login-modal.service';
 
 interface SignupFormValues {
   firstName?: string;
@@ -29,6 +30,7 @@ export class SignUp {
   private router = inject(Router);
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  private loginModalService = inject(LoginModalService);
 
   @ViewChild('photoInput') photoInput?: ElementRef<HTMLInputElement>;
 
@@ -55,6 +57,10 @@ export class SignUp {
 
   pickPhoto(): void {
     this.photoInput?.nativeElement.click();
+  }
+
+  openLogin(): void {
+    this.loginModalService.open();
   }
 
   onPhotoSelected(event: any) {

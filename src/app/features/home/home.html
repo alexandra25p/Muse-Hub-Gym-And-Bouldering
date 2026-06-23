@@ -11,8 +11,12 @@
       <a href="#bouldering">Bouldering</a>
     </div>
     <div class="nav-actions">
-      <button nz-button type="button" (click)="openLogin()">Sign In</button>
-      <button nz-button nzType="primary" type="button" routerLink="/signup">Join Now</button>
+      @if (!userService.user()) {
+        <button nz-button type="button" (click)="openLogin()">Sign In</button>
+        <button nz-button nzType="primary" type="button" routerLink="/signup">Join Now</button>
+      } @else {
+        <button nz-button nzType="primary" type="button" routerLink="/dashboard">Dashboard</button>
+      }
     </div>
   </div>
 </nav>
@@ -25,12 +29,18 @@
     <p class="hero-sub">Gym & Bouldering</p>
     <p class="hero-desc">Climb higher. Train stronger. Find your muse.</p>
     <div class="hero-ctas">
-      <button nz-button nzType="primary" nzSize="large" type="button" routerLink="/signup">
-        Get Started
-      </button>
-      <button nz-button nzSize="large" type="button" (click)="openLogin()">
-        Sign In
-      </button>
+      @if (!userService.user()) {
+        <button nz-button nzType="primary" nzSize="large" type="button" routerLink="/signup">
+          Get Started
+        </button>
+        <button nz-button nzSize="large" type="button" (click)="openLogin()">
+          Sign In
+        </button>
+      } @else {
+        <button nz-button nzType="primary" nzSize="large" type="button" routerLink="/dashboard">
+          Go to Dashboard
+        </button>
+      }
     </div>
   </div>
   <div class="hero-blobs">

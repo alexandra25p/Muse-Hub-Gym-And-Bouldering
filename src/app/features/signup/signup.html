@@ -102,6 +102,11 @@
         <div class="actions">
             <button type="submit" class="primary-btn" [disabled]="form.invalid">Create account</button>
         </div>
+
+        <p class="login-link-row" style="text-align: center; margin-top: 15px; font-size: 14px;">
+          Already have an account? 
+          <a href="javascript:void(0)" (click)="openLogin()" style="color: #a06df5; font-weight: 500;">Log in</a>
+        </p>
       </form>
     </div>
   </div>

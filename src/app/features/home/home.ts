@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { LoginModalService } from '../../core/services/login-modal.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,8 @@ import { LoginModalService } from '../../core/services/login-modal.service';
   styleUrl: './home.scss',
 })
 export class Home {
-  constructor(private loginModal: LoginModalService) {}
+  private loginModal = inject(LoginModalService);
+  protected userService = inject(UserService);
 
   openLogin(): void {
     this.loginModal.open();

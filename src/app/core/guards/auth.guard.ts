@@ -13,6 +13,18 @@ export const authGuard: CanActivateFn = () => {
   return true;
 };
 
+export const unauthGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  const isLoggedIn = !!(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
+  if (isLoggedIn) {
+    router.navigate(['/dashboard']);
+    return false;
+  }
+
+  return true;
+};
+
 export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const rawUser = localStorage.getItem('user') || sessionStorage.getItem('user');
