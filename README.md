@@ -90,15 +90,15 @@ Este pagina de destinație publică a aplicației. Aceasta prezintă facilităț
 Orarul claselor (Yoga, HIIT, Pilates etc.) este structurat ca un tabel interactiv complex cu funcționalități de căutare, filtrare live, sortare directă din capul de tabel după oricare din cele 7 coloane de date și confirmări de siguranță (`nz-popconfirm`) la ștergere.
 
 - **Pentru Membri**: Aceștia pot rezerva și anula rezervările lor la clase printr-un singur click, numărul de locuri disponibile (spots) actualizându-se dinamic.
-- **Pentru Admin**: Oferă control CRUD complet. Permite adăugarea de clase noi sau modificarea celor existente direct prin intermediul unui modal securizat ce validează orarul și capacitățile selectate.
+- **Pentru Admin**: Oferă control CRUD complet. Permite adăugarea de clase noi sau modificarea celor existente direct prin intermediul unui modal securizat ce validează orarul și capacitățile selectate. De asemenea, adminul poate marca prezența participanților la fiecare clasă, lista de prezenți (`attended`) fiind sincronizată în Firestore.
 
 #### 5.5 Jurnalul de Antrenament (Journal) & Realizări (Achievements)
 
-Membrii pot introduce activitățile lor sportive zilnice (tipul antrenamentului, durata, caloriile arse și o descriere). Datele sunt stocate în mod izolat per utilizator (utilizând prefixe securizate bazate pe adresa de e-mail), permițând utilizatorilor care folosesc același browser să își mențină jurnalele private. De asemenea, pe măsură ce antrenamentele se acumulează, utilizatorii deblochează dinamic medalii și realizări virtuale.
+Membrii pot introduce activitățile lor sportive zilnice în două categorii distincte: **Fitness** (grupe musculare, echipament, repetări, calorii) și **Bouldering** (trasee finalizate, trasee flashate, grad de dificultate, durată). Datele sunt stocate în Cloud Firestore (colecția `workouts`), filtrate în timp real după emailul utilizatorului autentificat, asigurând izolarea completă a jurnalelor între utilizatori. Pe măsură ce antrenamentele se acumulează, utilizatorii deblochează dinamic medalii și realizări virtuale.
 
 #### 5.6 Vizualizarea Panourilor (Wall) & Clasamentul (Leaderboard)
 
-- **Wall**: Prezintă traseele de bouldering de pe panourile sălii, sortate după grade de dificultate.
+- **Wall**: Gestionarea completă a traseelor de bouldering, sincronizate în timp real din Firestore (colecția `routes`). Membrii pot marca traseele ca finalizate („sends"), urmărindu-și propriul progres. Administratorii au control CRUD complet — pot adăuga, modifica sau șterge trasee printr-un modal securizat. Pagina oferă filtrare după grad de dificultate (V0–V10+), căutare după nume/setter și cod culoare pentru prize.
 - **Leaderboard**: O listă ierarhică ce afișează utilizatorii ordonați în funcție de nivelul lor de activitate fizică recentă, oferind comunității un spirit competitiv benefic.
 
 #### 5.7 Panoul Administrativ (Admin)
