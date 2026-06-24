@@ -1,31 +1,31 @@
-/* Dark mode global overrides */
+/*darkmode*/
 body.dark-mode {
   background: #0f0f1a;
   color: #e8e8f0;
 }
 
-/* ─── Navbar ─────────────────────────────────── */
+/*navbar*/
 body.dark-mode .app-nav {
   background: rgba(15, 15, 26, 0.96);
   border-bottom-color: rgba(155, 127, 212, 0.15);
 }
-body.dark-mode .app-nav .brand-name { color: #9b7fd4; }
+body.dark-mode .app-nav .brand-name { color: #c3b1e1 !important; }
 body.dark-mode .app-nav .brand-sep,
-body.dark-mode .app-nav .brand-sub { color: #4a4a6a; }
-body.dark-mode .app-nav .nav-links a { color: #9090b0; }
+body.dark-mode .app-nav .brand-sub { color: #8080a0 !important; }
+body.dark-mode .app-nav .nav-links a { color: #c0c0d8 !important; }
 body.dark-mode .app-nav .nav-links a:hover,
-body.dark-mode .app-nav .nav-links a.active { color: #9b7fd4; border-bottom-color: #9b7fd4; }
-body.dark-mode .app-nav .user-name { color: #9090b0; }
+body.dark-mode .app-nav .nav-links a.active { color: #d0bbf2 !important; border-bottom-color: #d0bbf2 !important; }
+body.dark-mode .app-nav .user-name { color: #e8e8f0 !important; }
 
-/* ─── Stat cards (dashboard + journal) ─────── */
+/*stat cards*/
 body.dark-mode .stat-card.stat-purple { background: linear-gradient(135deg, #2a1f3d, #1e1530); }
 body.dark-mode .stat-card.stat-blue   { background: linear-gradient(135deg, #1a2535, #121c2a); }
 body.dark-mode .stat-card .stat-label { color: #5a5a7a; }
 
-/* ─── Dashboard ─────────────────────────────── */
-body.dark-mode .welcome-section h1 { color: #e8e8f0; }
-body.dark-mode .welcome-section p  { color: #5a5a7a; }
-body.dark-mode .section-block h2   { color: #e8e8f0; }
+/*dashboard*/
+body.dark-mode .welcome-section h1 { color: #e8e8f0 !important; }
+body.dark-mode .welcome-section p  { color: #9090b0 !important; }
+body.dark-mode .section-block h2   { color: #e8e8f0 !important; }
 
 body.dark-mode .upcoming-list {
   background: #1a1a2e;
@@ -59,9 +59,9 @@ body.dark-mode .feed-item:hover       { background: #20203a; }
 body.dark-mode .feed-meta             { color: #5a5a7a; }
 body.dark-mode .feed-detail           { color: #7070a0; }
 
-/* ─── Journal ───────────────────────────────── */
-body.dark-mode .journal-page .page-title { color: #e8e8f0; }
-body.dark-mode .journal-page .page-sub   { color: #5a5a7a; }
+/*journal*/
+body.dark-mode .journal-page .page-title { color: #e8e8f0 !important; }
+body.dark-mode .journal-page .page-sub   { color: #9090b0 !important; }
 body.dark-mode .entries-section           { background: #1a1a2e; box-shadow: 0 2px 16px rgba(0,0,0,.4); }
 body.dark-mode .filter-bar                { border-bottom-color: #252538; }
 body.dark-mode .pill                      { background: #20203a; border-color: #252538; color: #7070a0; }
@@ -73,27 +73,28 @@ body.dark-mode .entry-date                { color: #5a5a7a; }
 body.dark-mode .chart-card                { background: #1a1a2e; box-shadow: 0 2px 16px rgba(0,0,0,.3); }
 body.dark-mode .charts-section .section-title { color: #e8e8f0; }
 
-/* ─── Classes page ───────────────────────────── */
-body.dark-mode .classes-page .page-title { color: #e8e8f0; }
-body.dark-mode .classes-page .page-sub   { color: #5a5a7a; }
+/*classes*/
+body.dark-mode .classes-page .page-title { color: #e8e8f0 !important; }
+body.dark-mode .classes-page .page-sub   { color: #9090b0 !important; }
 
-/* ─── Profile ────────────────────────────────── */
-body.dark-mode .profile-card    { background: #1a1a2e; box-shadow: 0 4px 32px rgba(0,0,0,.5); }
-body.dark-mode .profile-card .user-name { color: #e8e8f0; }
-body.dark-mode .divider         { background: #252538; }
-body.dark-mode .info-section h3 { color: #e8e8f0; }
-body.dark-mode .info-row        { border-bottom-color: #20203a; }
-body.dark-mode .info-row .info-label { color: #5a5a7a; }
-body.dark-mode .info-row .info-value { color: #e8e8f0; }
+/*profile*/
+body.dark-mode .profile-card    { background: #1a1a2e !important; box-shadow: 0 4px 32px rgba(0,0,0,.5) !important; }
+body.dark-mode .profile-card .user-name { color: #e8e8f0 !important; }
+body.dark-mode .profile-card .user-email { color: #9090b0 !important; }
+body.dark-mode .divider         { background: #252538 !important; }
+body.dark-mode .info-section h3 { color: #e8e8f0 !important; }
+body.dark-mode .info-row        { border-bottom-color: #20203a !important; }
+body.dark-mode .info-row .info-label { color: #9090b0 !important; }
+body.dark-mode .info-row .info-value { color: #e8e8f0 !important; }
 body.dark-mode .badge-card      { background: #20203a; border-color: #252538; }
 body.dark-mode .badge-card.earned { background: linear-gradient(135deg, #2a1f3d, #1e1530); }
 body.dark-mode .badge-name      { color: #e8e8f0; }
 body.dark-mode .badge-desc      { color: #5a5a7a; }
 body.dark-mode .achievements-title { color: #e8e8f0; }
 
-/* ─── Leaderboard ────────────────────────────── */
-body.dark-mode .leaderboard-page .page-title { color: #e8e8f0; }
-body.dark-mode .leaderboard-page .page-sub   { color: #5a5a7a; }
+/* leaderboard */
+body.dark-mode .leaderboard-page .page-title { color: #e8e8f0 !important; }
+body.dark-mode .leaderboard-page .page-sub   { color: #9090b0 !important; }
 body.dark-mode .lb-table        { background: #1a1a2e; box-shadow: 0 2px 16px rgba(0,0,0,.4); }
 body.dark-mode .lb-row          { border-bottom-color: #252538; }
 body.dark-mode .lb-row:hover    { background: #20203a; }
@@ -105,12 +106,16 @@ body.dark-mode .podium-card.silver { background: linear-gradient(135deg, #1e1e2e
 body.dark-mode .podium-card.bronze { background: linear-gradient(135deg, #2a1c14, #1e1410); }
 body.dark-mode .podium-name     { color: #e8e8f0; }
 
-/* ─── Admin ──────────────────────────────────── */
-body.dark-mode .admin-page .page-title { color: #e8e8f0; }
-body.dark-mode .admin-page .page-sub   { color: #5a5a7a; }
+/*admin*/
+body.dark-mode .admin-page .page-title { color: #e8e8f0 !important; }
+body.dark-mode .admin-page .page-sub   { color: #9090b0 !important; }
+
+/* Wall Page Headers */
+body.dark-mode .wall-page .page-title { color: #e8e8f0 !important; }
+body.dark-mode .wall-page .page-sub   { color: #9090b0 !important; }
 body.dark-mode .admin-section-title    { color: #e8e8f0; }
 
-/* ─── nz-zorro component overrides ──────────── */
+/*nz-zorro components overrides */
 body.dark-mode .ant-table-wrapper,
 body.dark-mode .ant-table,
 body.dark-mode .ant-table-container { background: #1a1a2e; }
@@ -165,12 +170,18 @@ body.dark-mode .ant-btn-default:hover {
   color: #9b7fd4;
 }
 
-body.dark-mode .ant-form-item-label > label { color: #9090b0; }
-body.dark-mode .ant-form-item-explain-error  { color: #ff7875; }
+body.dark-mode .ant-form-item-label > label { color: #9090b0 !important; }
+body.dark-mode .ant-form-item-explain-error  { color: #ff7875 !important; }
 
 body.dark-mode .ant-checkbox-inner {
-  background: #20203a;
-  border-color: #252538;
+  background: #20203a !important;
+  border-color: #252538 !important;
+}
+body.dark-mode .ant-checkbox-wrapper {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-checkbox-wrapper-checked {
+  color: #e8e8f0 !important;
 }
 
 body.dark-mode .ant-popover-inner { background: #1a1a2e; }
@@ -182,6 +193,292 @@ body.dark-mode .ant-message-notice-content {
 }
 
 body.dark-mode .ant-radio-inner { background: #20203a; border-color: #252538; }
-body.dark-mode .ant-radio-wrapper { color: #e8e8f0; }
+body.dark-mode .ant-radio-wrapper { color: #e8e8f0 !important; }
+body.dark-mode label { color: #e8e8f0 !important; }
 
-body.dark-mode .ant-switch { background: #252538; }
+/* Global Placeholders in Dark Mode */
+body.dark-mode ::placeholder {
+  color: #6a6a8a !important;
+}
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder,
+body.dark-mode .ant-input::placeholder,
+body.dark-mode .ant-input-number-input::placeholder {
+  color: #6a6a8a !important;
+}
+
+body.dark-mode .ant-switch { background: #252538 !important; }
+body.dark-mode .ant-switch-checked { background: #9b7fd4 !important; }
+
+/* Navbar Buttons & Dropdowns in Dark Mode */
+body.dark-mode .app-nav .ant-btn {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .app-nav .ant-btn:hover,
+body.dark-mode .app-nav .ant-btn:focus {
+  background: #2a2a4a !important;
+  border-color: #9b7fd4 !important;
+  color: #9b7fd4 !important;
+}
+
+/* Home / Landing Page Navbar in Dark Mode */
+body.dark-mode .navbar {
+  background: rgba(15, 15, 26, 0.96) !important;
+  border-bottom-color: rgba(155, 127, 212, 0.15) !important;
+}
+body.dark-mode .navbar .ant-btn {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .navbar .ant-btn-primary {
+  background: #9b7fd4 !important;
+  border-color: #9b7fd4 !important;
+  color: #ffffff !important;
+}
+body.dark-mode .navbar .ant-btn-primary:hover {
+  background: #8262c8 !important;
+  border-color: #8262c8 !important;
+}
+body.dark-mode .navbar .nav-brand .brand-name {
+  color: #c3b1e1 !important;
+}
+body.dark-mode .navbar .nav-links a {
+  color: #c0c0d8 !important;
+}
+body.dark-mode .navbar .nav-links a:hover {
+  color: #d0bbf2 !important;
+}
+
+/* Global Button Dark Mode Overrides */
+body.dark-mode .ant-btn {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-btn-primary {
+  background: #9b7fd4 !important;
+  border-color: #9b7fd4 !important;
+  color: #ffffff !important;
+}
+body.dark-mode .ant-btn-primary:hover {
+  background: #8262c8 !important;
+  border-color: #8262c8 !important;
+}
+body.dark-mode .ant-btn-text {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-btn-text:hover {
+  background: #20203a !important;
+  color: #9b7fd4 !important;
+}
+body.dark-mode .ant-btn-danger {
+  color: #ff7875 !important;
+  border-color: #ff7875 !important;
+  background: transparent !important;
+}
+body.dark-mode .ant-btn-danger:hover {
+  color: #ffffff !important;
+  background: #ff4d4f !important;
+  border-color: #ff4d4f !important;
+}
+
+/* Leaderboard Page Dark Mode Overrides */
+body.dark-mode .lb-header {
+  background: #20203a !important;
+  border-bottom: 1px solid #252538 !important;
+  color: #9090b0 !important;
+}
+body.dark-mode .lb-row.top3 {
+  background: #1e1e2e !important;
+  border-bottom: 1px solid #252538 !important;
+}
+body.dark-mode .lb-row.top3 .lb-name {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .lb-row.top3 .lb-val {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .lb-col-val,
+body.dark-mode .lb-col-extra {
+  color: #9090b0 !important;
+}
+body.dark-mode .sort-pill {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #9090b0 !important;
+}
+body.dark-mode .sort-pill:hover {
+  border-color: #9b7fd4 !important;
+  color: #9b7fd4 !important;
+}
+body.dark-mode .sort-pill.active {
+  background: linear-gradient(135deg, #9b7fd4, #5a9fd4) !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+body.dark-mode .podium-val {
+  color: #a0a0c0 !important;
+}
+
+/* Profile Achievements Card Dark Mode */
+body.dark-mode .achievements-card {
+  background: #1a1a2e !important;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5) !important;
+}
+body.dark-mode .achievements-sub {
+  color: #5a5a7a !important;
+}
+body.dark-mode .badge-card {
+  background: #20203a !important;
+  border-color: #252538 !important;
+}
+body.dark-mode .badge-card.earned {
+  background: linear-gradient(135deg, #2a1f3d, #1e1530) !important;
+  border-color: transparent !important;
+}
+
+/* Ant Design Inputs and Affix Wrappers (Search Input Groups) */
+body.dark-mode .ant-input-affix-wrapper {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-input-affix-wrapper > input.ant-input {
+  background: transparent !important;
+  border: none !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-input-prefix {
+  color: #9090b0 !important;
+}
+
+/* Ant Design Table Pagination */
+body.dark-mode .ant-pagination-item,
+body.dark-mode .ant-pagination-prev .ant-pagination-item-link,
+body.dark-mode .ant-pagination-next .ant-pagination-item-link,
+body.dark-mode .ant-pagination-jump-prev .ant-pagination-item-link,
+body.dark-mode .ant-pagination-jump-next .ant-pagination-item-link {
+  background: #20203a !important;
+  border-color: #252538 !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-pagination-item a {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .ant-pagination-item:hover,
+body.dark-mode .ant-pagination-prev:hover .ant-pagination-item-link,
+body.dark-mode .ant-pagination-next:hover .ant-pagination-item-link {
+  border-color: #9b7fd4 !important;
+  background: #2a2a4a !important;
+}
+body.dark-mode .ant-pagination-item:hover a {
+  color: #9b7fd4 !important;
+}
+body.dark-mode .ant-pagination-item-active {
+  border-color: #9b7fd4 !important;
+  background: #2d1f4a !important;
+}
+body.dark-mode .ant-pagination-item-active a {
+  color: #9b7fd4 !important;
+}
+
+/* Bouldering Wall Dark Mode Styles */
+body.dark-mode .route-card {
+  background: #1a1a2e !important;
+  border-color: rgba(155, 127, 212, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+body.dark-mode .route-card.completed {
+  background: #151525 !important;
+  opacity: 0.8 !important;
+}
+body.dark-mode .route-card .route-name {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .route-card .route-meta {
+  color: #5a5a7a !important;
+}
+body.dark-mode .route-card .send-count {
+  color: #5a5a7a !important;
+}
+body.dark-mode .sends-banner {
+  background: linear-gradient(135deg, #201a35, #152230) !important;
+  border-color: rgba(155, 127, 212, 0.25) !important;
+  color: #e8e8f0 !important;
+}
+body.dark-mode .sends-banner span[nz-icon] {
+  color: #9b7fd4 !important;
+}
+
+/* Admin Panel Page Dark Mode Overrides */
+body.dark-mode .admin-stat {
+  background: #20203a !important;
+}
+body.dark-mode .admin-stat .as-label {
+  color: #9090b0 !important;
+}
+body.dark-mode .admin-section-title {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .section-hint {
+  color: #9090b0 !important;
+}
+
+/* Member Table cell text overrides in Dark Mode */
+body.dark-mode .member-name {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .email-cell,
+body.dark-mode .date-cell {
+  color: #9090b0 !important;
+}
+
+/* Attendance list & accordion panels in Dark Mode */
+body.dark-mode .cls-block {
+  background: #1a1a2e !important;
+  border-color: #252538 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+body.dark-mode .cls-header:hover {
+  background: #20203a !important;
+}
+body.dark-mode .cls-name {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .cls-meta {
+  color: #9090b0 !important;
+}
+body.dark-mode .cls-enrolled {
+  color: #9090b0 !important;
+}
+body.dark-mode .cls-members {
+  background: #151525 !important;
+  border-top-color: #252538 !important;
+}
+body.dark-mode .attendance-row {
+  background: #1a1a2e !important;
+  border-color: #252538 !important;
+}
+body.dark-mode .att-email {
+  color: #e8e8f0 !important;
+}
+body.dark-mode .att-icon {
+  color: #9090b0 !important;
+}
+body.dark-mode .att-label {
+  color: #9090b0 !important;
+}
+body.dark-mode .att-label.att-present {
+  color: #52c41a !important;
+}
+
+/* Dashboard Quick Actions Overrides */
+body.dark-mode .action-card.action-admin {
+  background: linear-gradient(135deg, #3d1f1f, #301414) !important;
+  color: #ff9c9c !important;
+}

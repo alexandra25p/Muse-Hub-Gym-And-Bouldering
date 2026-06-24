@@ -15,6 +15,12 @@ export class DarkModeService {
     this.apply(next);
   }
 
+  disable(): void {
+    this.dark.set(false);
+    localStorage.setItem('museHubDark', '0');
+    this.apply(false);
+  }
+
   private apply(dark: boolean): void {
     document.body.classList.toggle('dark-mode', dark);
   }

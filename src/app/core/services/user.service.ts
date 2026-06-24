@@ -1,6 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../../../firebase';
+import { DarkModeService } from './dark-mode.service';
 
 export interface User {
   email: string;
@@ -21,6 +22,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  private darkModeService = inject(DarkModeService);
   user = signal<User | null>(this.loadUser());
 
   private loadUser(): User | null {
@@ -118,5 +120,6 @@ export class UserService {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
     this.user.set(null);
+    this.darkModeService.disable();
   }
 }
